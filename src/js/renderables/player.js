@@ -4,7 +4,7 @@ import { myself, LOCATION_KEY } from '../../gun2'
 
 // a number that limits the write speed of
 // location updates to something reasonable
-const THROTTLE_TO_MS = 400
+const THROTTLE_TO_MS = 100
 const updateMyLocation = throttle((x, y) => {
   myself.put({ [LOCATION_KEY]: { x, y } })
 }, THROTTLE_TO_MS)
