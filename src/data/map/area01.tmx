@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.8" tiledversion="1.8.2" orientation="orthogonal" renderorder="right-down" width="252" height="235" tilewidth="32" tileheight="32" infinite="0" nextlayerid="13" nextobjectid="28">
+ <objectgroup id="6" name="collision">
+  <object id="2" x="704" y="4916" width="1156" height="1412"/>
+  <object id="3" x="2096" y="4728" width="888" height="68"/>
+  <object id="4" x="2088" y="4800">
+   <polygon points="0,0 -772,-792 -648,-788 -4,-96"/>
+  </object>
+  <object id="5" x="-8" y="7216" width="8080" height="160"/>
+  <object id="7" x="5506.06" y="5357.58" width="1881.82" height="909.091"/>
+  <object id="8" x="3742.42" y="4721.21" width="1775.76" height="66.6667"/>
+ </objectgroup>
+ <objectgroup id="9" name="background">
+  <properties>
+   <property name="z" type="int" value="1"/>
+  </properties>
+  <object id="26" name="background" x="4" y="-12" width="8060" height="7520">
+   <properties>
+    <property name="frameheight" type="int" value="7300"/>
+    <property name="framewidth" type="int" value="8075"/>
+    <property name="image" value="building"/>
+   </properties>
+  </object>
+ </objectgroup>
+ <objectgroup color="#127f0d" id="4" name="mainPlayer">
+  <properties>
+   <property name="z" type="int" value="2"/>
+  </properties>
+  <object id="19" name="mainPlayer" x="3496.24" y="7111.88" width="116" height="117.333">
+   <properties>
+    <property name="frameheight" type="int" value="396"/>
+    <property name="framewidth" type="int" value="309"/>
+    <property name="image" value="pegah-avatar"/>
+   </properties>
+   <polygon points="0,0 116,0 116,117.333 0,117.333"/>
+  </object>
+ </objectgroup>
+</map>

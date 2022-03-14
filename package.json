@@ -1,0 +1,32 @@
+{
+  "name": "place-name-here",
+  "version": "1.0.0",
+  "main": "index.js",
+  "author": "Olivier Biot",
+  "license": "MIT",
+  "devDependencies": {
+    "@babel/cli": "latest",
+    "@babel/core": "latest",
+    "@babel/preset-env": "latest",
+    "@babel/register": "latest",
+    "babel-loader": "latest",
+    "copy-webpack-plugin": "latest",
+    "css-loader": "latest",
+    "fs": "latest",
+    "html-webpack-plugin": "latest",
+    "style-loader": "latest",
+    "webpack": "latest",
+    "webpack-cli": "latest",
+    "webpack-dev-server": "latest"
+  },
+  "scripts": {
+    "dev": "webpack-dev-server --mode=development --config webpack.config.js",
+    "build": "webpack --mode=production --config webpack.config.js"
+  },
+  "dependencies": {
+    "gun": "^0.2020.1235",
+    "gun-synclist": "^1.0.2",
+    "lodash.throttle": "^4.1.1",
+    "melonjs": "^10.3.0"
+  }
+}
