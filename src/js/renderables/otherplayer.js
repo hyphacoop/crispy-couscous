@@ -8,6 +8,8 @@ class OtherPlayer extends Sprite {
     // call the parent constructor
     super(x, y, settings)
 
+    this.anchorPoint.set(0.5, 0.5)
+
     // add a physic body
     this.body = new Body(this)
     // add a default collision shape
