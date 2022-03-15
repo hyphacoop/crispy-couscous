@@ -7,9 +7,10 @@ import Gun from 'gun'
 var server = createServer()
 
 // Our GUN setup from the last example.
-var gun = Gun({ web: server })
+var gun = Gun({ web: server, radisk: false  })
 
 // Start the server on port 8080.
-server.listen(8080, function () {
-  console.log('Server listening on http://localhost:8080/gun')
+const PORT = process.env.PORT || 8080
+server.listen(PORT, function () {
+  console.log(`Server listening on http://localhost:${PORT}/gun`)
 })

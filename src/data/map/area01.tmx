@@ -14,10 +14,10 @@
   <properties>
    <property name="z" type="int" value="1"/>
   </properties>
-  <object id="26" name="background" x="4" y="-12" width="8060" height="7520">
+  <object id="26" name="background" x="0" y="0" width="7798" height="8192">
    <properties>
-    <property name="frameheight" type="int" value="7300"/>
-    <property name="framewidth" type="int" value="8075"/>
+    <property name="frameheight" type="int" value="8192"/>
+    <property name="framewidth" type="int" value="7798"/>
     <property name="image" value="building"/>
    </properties>
   </object>

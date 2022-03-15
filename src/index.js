@@ -13,8 +13,9 @@ me.device.onReady(() => {
   const HTML_DIV_ID = 'screen'
   // const FULL_WIDTH = 8075
   // const FULL_HEIGHT = 7300
-  const FULL_WIDTH = 3000
-  const FULL_HEIGHT = 3000
+  // these numbers define roughly the field-of-view
+  const FULL_WIDTH = 2700
+  const FULL_HEIGHT = 2700
   if (
     !me.video.init(FULL_WIDTH, FULL_HEIGHT, {
       parent: HTML_DIV_ID,

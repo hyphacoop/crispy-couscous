@@ -17,8 +17,6 @@ class PlayerEntity extends Entity {
     // call the parent constructor
     super(x, y, settings)
 
-    this.framewidth = settings.framewidth
-    this.frameheight = settings.frameheight
     // draw image from the top left
     this.anchorPoint.set(0, 0)
 
