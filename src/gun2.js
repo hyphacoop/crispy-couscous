@@ -1,7 +1,7 @@
 import Gun from 'gun/gun'
 
 // const RELAY_ADDRESS = 'http://localhost:8080/gun'
-const RELAY_ADDRESS = 'http://192.168.1.68:8080/gun'
+const RELAY_ADDRESS = 'https://hypha-gun-relay.herokuapp.com/gun'
 const gun = Gun(RELAY_ADDRESS)
 
 
