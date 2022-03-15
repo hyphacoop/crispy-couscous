@@ -37,7 +37,7 @@
   <object id="42" x="2744" y="3057.33" width="414.667" height="161.333"/>
   <object id="43" x="3113.33" y="3028" width="2229.33" height="637.333"/>
   <object id="44" x="5295" y="2974" width="26.3333" height="2492.67"/>
-  <object id="45" x="2088" y="4044" width="3224" height="720"/>
+  <object id="45" x="2088" y="4252" width="3224" height="512"/>
   <object id="47" x="5316" y="5320">
    <polygon points="0,0 1.33333,149.333 565.333,-521.333 564,-569.333"/>
   </object>

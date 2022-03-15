@@ -148,7 +148,8 @@ class PlayerEntity extends Entity {
    */
   onCollision(response, other) {
     // Make all other objects solid, except the background
-    if (other.name === 'background') return false
+    // and other players
+    if (other.name === 'background' || other.name.contains('other-player-')) return false
     else return true
   }
 }

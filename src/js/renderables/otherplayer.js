@@ -8,7 +8,8 @@ class OtherPlayer extends Sprite {
     // call the parent constructor
     super(x, y, settings)
 
-    this.anchorPoint.set(0.5, 0.5)
+    // draw image from the top left
+    this.anchorPoint.set(0, 0)
 
     // add a physic body
     this.body = new Body(this)
