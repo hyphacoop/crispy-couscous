@@ -1,5 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.8" tiledversion="1.8.2" orientation="orthogonal" renderorder="right-down" width="252" height="265" tilewidth="32" tileheight="32" infinite="0" nextlayerid="15" nextobjectid="51">
+<map version="1.8" tiledversion="1.8.2" orientation="orthogonal" renderorder="right-down" width="252" height="265" tilewidth="32" tileheight="32" infinite="0" nextlayerid="15" nextobjectid="52">
+ <objectgroup id="9" name="background">
+  <properties>
+   <property name="z" type="int" value="1"/>
+  </properties>
+  <object id="26" name="background" x="0" y="0" width="7798" height="8192">
+   <properties>
+    <property name="frameheight" type="int" value="8192"/>
+    <property name="framewidth" type="int" value="7798"/>
+    <property name="image" value="building"/>
+   </properties>
+  </object>
+ </objectgroup>
  <objectgroup id="6" name="collision">
   <object id="2" x="422" y="5892" width="1322" height="1434"/>
   <object id="5" x="2940" y="8148" width="2072" height="160"/>
@@ -20,15 +32,12 @@
   </object>
   <object id="38" x="1415.15" y="3054.55" width="115.152" height="2242.42"/>
   <object id="39" x="1321.21" y="3439.39" width="527.273" height="221.212"/>
-  <object id="40" x="1842.42" y="3303.03" width="306.061" height="463.636"/>
+  <object id="40" x="1842.42" y="3211.03" width="306.061" height="463.636"/>
   <object id="41" x="2272" y="3109.33" width="504" height="560"/>
   <object id="42" x="2744" y="3057.33" width="414.667" height="161.333"/>
   <object id="43" x="3113.33" y="3028" width="2229.33" height="637.333"/>
   <object id="44" x="5295" y="2974" width="26.3333" height="2492.67"/>
   <object id="45" x="2088" y="4044" width="3224" height="720"/>
-  <object id="46" x="2144.67" y="3693.33">
-   <polygon points="0,0 1.33333,72 148.667,-30.6667 149.333,-97.3333"/>
-  </object>
   <object id="47" x="5316" y="5320">
    <polygon points="0,0 1.33333,149.333 565.333,-521.333 564,-569.333"/>
   </object>
@@ -37,18 +46,7 @@
   <object id="50" x="7384" y="4428">
    <polygon points="0,0 412,264 413.333,108 2.66667,-144"/>
   </object>
- </objectgroup>
- <objectgroup id="9" name="background">
-  <properties>
-   <property name="z" type="int" value="1"/>
-  </properties>
-  <object id="26" name="background" x="0" y="0" width="7798" height="8192">
-   <properties>
-    <property name="frameheight" type="int" value="8192"/>
-    <property name="framewidth" type="int" value="7798"/>
-    <property name="image" value="building"/>
-   </properties>
-  </object>
+  <object id="51" x="2121" y="3537" width="179" height="138"/>
  </objectgroup>
  <objectgroup color="#127f0d" id="4" name="mainPlayer">
   <properties>
