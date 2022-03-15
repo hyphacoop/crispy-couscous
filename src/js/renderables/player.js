@@ -116,13 +116,10 @@ class PlayerEntity extends Entity {
       // do x next
       if (this.destination.x) {
         if (this.destination.x - this.pos.x > 10) {
-          console.log('positive x adjustment', this.destination.x - this.pos.x)
           this.body.force.x = this.body.maxVel.x
         } else if (this.destination.x - this.pos.x < -10) {
-          console.log('negative x adjustment', this.destination.x - this.pos.x)
           this.body.force.x = -this.body.maxVel.x
         } else {
-          console.log('resetting x adjustment', this.destination.x - this.pos.x)
           this.body.force.x = 0
           this.pos.x = this.destination.x
           this.destination.x = undefined
