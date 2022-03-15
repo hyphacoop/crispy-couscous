@@ -1,30 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.8" tiledversion="1.8.2" orientation="orthogonal" renderorder="right-down" width="252" height="235" tilewidth="32" tileheight="32" infinite="0" nextlayerid="15" nextobjectid="51">
- <objectgroup id="9" name="background">
-  <properties>
-   <property name="z" type="int" value="1"/>
-  </properties>
-  <object id="26" name="background" x="0" y="0" width="7798" height="8192">
-   <properties>
-    <property name="frameheight" type="int" value="8192"/>
-    <property name="framewidth" type="int" value="7798"/>
-    <property name="image" value="building"/>
-   </properties>
-  </object>
- </objectgroup>
- <imagelayer id="14" name="Image Layer 1" visible="0">
-  <image source="../img/map/building.png" width="7798" height="8192"/>
- </imagelayer>
+<map version="1.8" tiledversion="1.8.2" orientation="orthogonal" renderorder="right-down" width="252" height="265" tilewidth="32" tileheight="32" infinite="0" nextlayerid="15" nextobjectid="51">
  <objectgroup id="6" name="collision">
-  <object id="2" name="garden patch" x="422" y="5892" width="1322" height="1434"/>
-  <object id="5" name="entry" x="2940" y="8148" width="2072" height="160"/>
-  <object id="7" name="pool" x="5581.82" y="5981.82" width="1742.43" height="1000"/>
-  <object id="8" name="buildingwall2" x="3580.48" y="5362.66" width="1738.43" height="104"/>
-  <object id="29" name="buildingwall1" x="1524.79" y="5362" width="1396.43" height="104"/>
-  <object id="30" name="fencing1" x="4860" y="7768" width="2960" height="544"/>
-  <object id="31" name="rightwall" x="7736" y="4664" width="96" height="3672"/>
-  <object id="32" name="leftwall" x="-64" y="4556" width="96" height="3672"/>
-  <object id="33" name="fencing2" x="-52" y="7768" width="3216" height="544"/>
+  <object id="2" x="422" y="5892" width="1322" height="1434"/>
+  <object id="5" x="2940" y="8148" width="2072" height="160"/>
+  <object id="7" x="5581.82" y="5981.82" width="1742.43" height="1000"/>
+  <object id="8" x="3580.48" y="5362.66" width="1738.43" height="104"/>
+  <object id="29" x="1524.79" y="5362" width="1396.43" height="104"/>
+  <object id="30" x="4860" y="7768" width="2960" height="544"/>
+  <object id="31" x="7736" y="4664" width="96" height="3672"/>
+  <object id="32" x="-64" y="4556" width="96" height="3672"/>
+  <object id="33" x="-52" y="7768" width="3216" height="544"/>
   <object id="34" x="2" y="4422">
    <polygon points="0,0 6,274 386,2 388,-280"/>
   </object>
@@ -51,6 +36,18 @@
   <object id="49" x="5846" y="4318" width="1646" height="106"/>
   <object id="50" x="7384" y="4428">
    <polygon points="0,0 412,264 413.333,108 2.66667,-144"/>
+  </object>
+ </objectgroup>
+ <objectgroup id="9" name="background">
+  <properties>
+   <property name="z" type="int" value="1"/>
+  </properties>
+  <object id="26" name="background" x="0" y="0" width="7798" height="8192">
+   <properties>
+    <property name="frameheight" type="int" value="8192"/>
+    <property name="framewidth" type="int" value="7798"/>
+    <property name="image" value="building"/>
+   </properties>
   </object>
  </objectgroup>
  <objectgroup color="#127f0d" id="4" name="mainPlayer">
