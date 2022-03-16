@@ -40,4 +40,16 @@ function createOrUpdateOtherPlayer(id, details) {
   }
 }
 
+function removePlayer(id) {
+  const player = game.world.getChildByName(`other-player-${id}`)[0]
+  if (player) {
+    game.world.removeChild(player)
+  }
+  delete artistasPlayers[id]
+}
+
+export {
+  removePlayer
+}
+
 export default createOrUpdateOtherPlayer

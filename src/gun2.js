@@ -1,5 +1,7 @@
+import { game } from 'melonjs/dist/melonjs.module'
 import Gun from 'gun/gun'
 import 'gun/lib/load.js'
+import { removePlayer } from './js/createOrUpdateOtherPlayer'
 
 // const RELAY_ADDRESS = 'http://localhost:8080/gun'
 const RELAY_ADDRESS = 'https://hypha-gun-relay.herokuapp.com/gun'
@@ -51,25 +53,27 @@ function subscribeToArtistas(callback) {
     // once per artista, including those that are added over time
     .on((data, id) => {
       // data could have values, or be null
-      if (data) {
+      // if data doesn't have LOCATION_KEY
+      // that's our signal to remove this
+      console.log('data', data, id)
+      if (data && data[LOCATION_KEY]) {
         artistas.get(id).load((values) => {
           if (
             typeof values[LOCATION_KEY].y !== 'number' ||
             typeof values[LOCATION_KEY].x !== 'number'
           ) {
+            // if location is null
+            // clear user
+            removePlayer(id)
             return
           }
           callback(id, values)
         })
       } else {
+        // if `data` is null
         // clear user
+        removePlayer(id)
       }
-      // const artista = artistas.get(id)
-      // console.log('on data', data, id)
-      // listen to all changes to location
-      // artista.get(LOCATION_KEY).on((locationData) => {
-      //   callback(id, locationData.x, locationData.y)
-      // })
     })
 }
 

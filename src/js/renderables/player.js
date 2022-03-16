@@ -11,6 +11,17 @@ const updateMyLocation = throttle((x, y) => {
   myself.put({ [LOCATION_KEY]: { x, y } })
 }, THROTTLE_TO_MS)
 
+// remove me when the window closes
+window.addEventListener('visibilitychange', function () {
+  // remove my location from gun cache
+  if (document.visibilityState === 'hidden') {
+    console.log('became hidden')
+    myself.put({ [LOCATION_KEY]: null })
+  } else {
+    // refresh?
+  }
+})
+
 class PlayerEntity extends Entity {
   /**
    * constructor
