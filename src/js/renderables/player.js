@@ -1,8 +1,10 @@
+import Peer from 'peerjs'
 import { input, game, Entity } from 'melonjs/dist/melonjs.module.js'
 import throttle from 'lodash.throttle'
 import { myself, LOCATION_KEY } from '../../gun2'
 import { SELF_REPRESENTATION_SIZE } from '../../selfRepresentation'
 import localToGlobal from '../../coord'
+import { createRecordOfOpenCall } from '../../calls'
 
 // a number that limits the write speed of
 // location updates to something reasonable
@@ -36,8 +38,43 @@ class PlayerEntity extends Entity {
       frameheight: SELF_REPRESENTATION_SIZE,
     })
 
+    this.id = settings.id
     this.artistaName = settings.artistaName
 
+    // audio
+    this.peer = new Peer('id')
+    var getUserMedia =
+      navigator.getUserMedia ||
+      navigator.webkitGetUserMedia ||
+      navigator.mozGetUserMedia
+
+    var that = this
+    getUserMedia(
+      { video: false, audio: true },
+      (stream) => {
+        console.log('got my stream')
+        that.stream = stream
+        that.peer.on('call', (call) => {
+          if (!checkForOpenCall(call.peer.id)) {
+            call.answer(stream) // Answer the call with an A/V stream.
+            call.on('stream', function (remoteStream) {
+              createRecordOfOpenCall(call.peer.id)
+              const audio = document.createElement('audio')
+              audio.srcObject = remoteStream
+              audio.autoplay = true
+              audio.style.display = 'hidden'
+              document.body.appendChild(audio)
+              // Show stream in some video/canvas element.
+            })
+          }
+        })
+      },
+      (err) => {
+        console.error('Failed to get local stream', err)
+      }
+    )
+
+    // label
     this.myNameText = document.createElement('div')
     this.myNameText.innerHTML = this.artistaName
     this.myNameText.classList.add('name-label')

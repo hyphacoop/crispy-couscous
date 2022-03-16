@@ -11,7 +11,7 @@ module.exports = {
     filename: 'bundle.js'
   },
   module: {
-    noParse: /gun\.js$/,
+    noParse: /gun\.js|peerjs\.min\.js$/,
     rules : [
       {
         test: /\.js$/,

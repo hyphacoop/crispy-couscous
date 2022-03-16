@@ -55,7 +55,6 @@ function subscribeToArtistas(callback) {
       // data could have values, or be null
       // if data doesn't have LOCATION_KEY
       // that's our signal to remove this
-      console.log('data', data, id)
       if (data && data[LOCATION_KEY]) {
         artistas.get(id).load((values) => {
           if (

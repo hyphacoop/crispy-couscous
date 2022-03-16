@@ -10,6 +10,7 @@ import BackgroundEntity from './js/renderables/background'
 import {
   NAME_KEY,
   myself,
+  myselfId,
   setMyself,
   IMAGE_KEY,
   LOCATION_KEY,
@@ -54,11 +55,11 @@ const setupNameCollectorListeners = () => {
     const randomId = Math.random().toString().split('.')[1]
     setMyself(randomId)
     // collect the name and pick my color/image now too
-    addMyself(nameInput.value, pickRandomImage())
+    addMyself(nameInput.value, pickRandomImage(), randomId)
   })
 }
 
-const addMyself = (name, image) => {
+const addMyself = (name, image, id) => {
   // clear the overlay
   overlay.remove()
   // only now start listening for navigational keyboard events
@@ -68,6 +69,7 @@ const addMyself = (name, image) => {
   const mainPlayer = new PlayerEntity(SPAWN_X, SPAWN_Y, {
     artistaName: name,
     image: image,
+    id: id
   })
   me.game.world.addChild(mainPlayer, 4)
 
@@ -142,7 +144,7 @@ me.device.onReady(() => {
 
     if (!IS_NEW_HERE) {
       myself.load((meData) => {
-        addMyself(meData[NAME_KEY], meData[IMAGE_KEY])
+        addMyself(meData[NAME_KEY], meData[IMAGE_KEY], myselfId)
       })
     } else {
       setupNameCollectorListeners()

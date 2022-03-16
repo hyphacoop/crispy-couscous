@@ -1,4 +1,5 @@
 import { game } from 'melonjs/dist/melonjs.module.js'
+import { checkForOpenCall, createRecordOfOpenCall } from '../calls'
 import getMainPlayer from '../getMainPlayer'
 import { IMAGE_KEY, LOCATION_KEY, NAME_KEY } from '../gun2'
 import { SELF_REPRESENTATION_SIZE } from '../selfRepresentation'
@@ -29,6 +30,17 @@ function createOrUpdateOtherPlayer(id, details) {
     // for me, in terms of zIndex
     const mainPlayer = getMainPlayer()
     game.world.moveToTop(mainPlayer)
+    if (!checkForOpenCall(id)) {
+      const call = peer.call(id, mainPlayer.stream)
+      call.on('stream', (remoteStream) => {
+        createRecordOfOpenCall(id)
+        const audio = document.createElement('audio')
+        audio.srcObject = remoteStream
+        audio.autoplay = true
+        audio.style.display = 'hidden'
+        document.body.appendChild(audio)
+      })
+    }
   } else {
     artistaPlayer.pos.x = details[LOCATION_KEY].x
     artistaPlayer.pos.y = details[LOCATION_KEY].y
@@ -48,8 +60,6 @@ function removePlayer(id) {
   delete artistasPlayers[id]
 }
 
-export {
-  removePlayer
-}
+export { removePlayer }
 
 export default createOrUpdateOtherPlayer
