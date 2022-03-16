@@ -7,11 +7,25 @@ import PlayerEntity from 'js/renderables/player.js'
 
 import DataManifest from 'manifest.js'
 import BackgroundEntity from './js/renderables/background'
-import { NAME_KEY, myself, IMAGE_KEY, LOCATION_KEY } from './gun2'
+import {
+  NAME_KEY,
+  myself,
+  setMyself,
+  IMAGE_KEY,
+  LOCATION_KEY,
+  IS_NEW_HERE,
+} from './gun2'
 import pickRandomImage from './selfRepresentation'
-import localToGlobal from './coord'
 
-// SPAWN POINT
+// HACK this is just to filter out painfully verbose gunjs logs
+let oldConsoleLog = console.log
+console.log = (...args) => {
+  if (!args[0].includes('warning!') && !args[0].includes('Warning!')) {
+    oldConsoleLog(...args)
+  }
+}
+
+// SPAWN POINT (in the doorway)
 const SPAWN_X = 3852
 const SPAWN_Y = 7723
 
@@ -22,23 +36,29 @@ const INPUT_ID = 'name-input'
 const BUTTON_ID = 'enter-space-button'
 
 const overlay = document.getElementById(OVERLAY_ID)
-const nameInput = document.getElementById(INPUT_ID)
-const nameButton = document.getElementById(BUTTON_ID)
-const onChange = () => {
-  if (nameInput.value) {
-    nameButton.removeAttribute('disabled')
-  } else {
-    nameButton.setAttribute('disabled', true)
-  }
-}
-nameInput.addEventListener('paste', onChange)
-nameInput.addEventListener('keyup', onChange)
-nameButton.addEventListener('click', () => {
-  // collect the name
-  const artistaName = nameInput.value
-  // pick my color/image now too
-  const artistaImage = pickRandomImage()
 
+const setupNameCollectorListeners = () => {
+  const nameInput = document.getElementById(INPUT_ID)
+  const nameButton = document.getElementById(BUTTON_ID)
+  const onChange = () => {
+    if (nameInput.value) {
+      nameButton.removeAttribute('disabled')
+    } else {
+      nameButton.setAttribute('disabled', true)
+    }
+  }
+  nameInput.addEventListener('paste', onChange)
+  nameInput.addEventListener('keyup', onChange)
+  nameButton.addEventListener('click', () => {
+    // pick an id for myself
+    const randomId = Math.random().toString().split('.')[1]
+    setMyself(randomId)
+    // collect the name and pick my color/image now too
+    addMyself(nameInput.value, pickRandomImage())
+  })
+}
+
+const addMyself = (name, image) => {
   // clear the overlay
   overlay.remove()
   // only now start listening for navigational keyboard events
@@ -46,21 +66,21 @@ nameButton.addEventListener('click', () => {
 
   // create my player
   const mainPlayer = new PlayerEntity(SPAWN_X, SPAWN_Y, {
-    artistaName: artistaName,
-    image: artistaImage,
+    artistaName: name,
+    image: image,
   })
   me.game.world.addChild(mainPlayer, 4)
 
   // now cache and broadcast to peers too
   myself.put({
-    [IMAGE_KEY]: artistaImage,
-    [NAME_KEY]: artistaName,
+    [IMAGE_KEY]: image,
+    [NAME_KEY]: name,
     [LOCATION_KEY]: {
       x: SPAWN_X,
       y: SPAWN_Y,
     },
   })
-})
+}
 
 const bindKeyboardListeners = () => {
   // enable the keyboard
@@ -119,5 +139,13 @@ me.device.onReady(() => {
 
     // Start the game.
     me.state.change(me.state.PLAY)
+
+    if (!IS_NEW_HERE) {
+      myself.load((meData) => {
+        addMyself(meData[NAME_KEY], meData[IMAGE_KEY])
+      })
+    } else {
+      setupNameCollectorListeners()
+    }
   })
 })

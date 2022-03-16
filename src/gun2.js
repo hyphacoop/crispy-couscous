@@ -18,19 +18,29 @@ const artistas = gun.get(ARTISTAS_KEY)
 //   artistas.get(id).put(null)
 // })
 
+let IS_NEW_HERE = false
+
 // check if I've visited before.
 // re-use my id if so.
 // if not, generate a random ID for myself
 let myselfId = localStorage.getItem(LOCALSTORAGE_ME_KEY)
+
+// a gunjs node
+let myself
+
 if (!myselfId) {
-  myselfId = Math.random().toString().split('.')[1]
-  localStorage.setItem(LOCALSTORAGE_ME_KEY, myselfId)
-  console.log('first time to use, this is my id: ', myselfId)
+  IS_NEW_HERE = true
+  console.log('first time here')
 } else {
-  console.log('second time use, this is my id: ', myselfId)
+  console.log('second time here, this is my id: ', myselfId)
+  setMyself(myselfId)
 }
 
-const myself = artistas.get(myselfId)
+function setMyself(id) {
+  myselfId = id
+  localStorage.setItem(LOCALSTORAGE_ME_KEY, myselfId)
+  myself = artistas.get(myselfId)
+}
 
 function subscribeToArtistas(callback) {
   artistas
@@ -64,8 +74,10 @@ function subscribeToArtistas(callback) {
 }
 
 export {
+  IS_NEW_HERE,
   gun,
   myself,
+  setMyself,
   artistas,
   myselfId,
   subscribeToArtistas,
