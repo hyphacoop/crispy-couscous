@@ -45,3 +45,12 @@ body {
   width: 50vw;
   margin: 0 auto;
 }
+
+.name-label {
+  font-family: helvetica, sans-serif;
+  transform: translate(-50%);
+  background: white;
+  padding: 4px 6px;
+  border-radius: 3px;
+  color: #333;
+}

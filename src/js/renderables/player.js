@@ -1,7 +1,8 @@
 import { input, game, Entity } from 'melonjs/dist/melonjs.module.js'
 import throttle from 'lodash.throttle'
 import { myself, LOCATION_KEY } from '../../gun2'
-import pickRandomImage, { SELF_REPRESENTATION_SIZE } from '../../selfRepresentation'
+import { SELF_REPRESENTATION_SIZE } from '../../selfRepresentation'
+import localToGlobal from '../../coord'
 
 // a number that limits the write speed of
 // location updates to something reasonable
@@ -26,8 +27,16 @@ class PlayerEntity extends Entity {
 
     this.artistaName = settings.artistaName
 
+    this.myNameText = document.createElement('div')
+    this.myNameText.innerHTML = this.artistaName
+    this.myNameText.classList.add('name-label')
+    this.myNameText.style.position = `absolute`
+    // x and y are 'world' coordinates
+    this.updateLabelPosition(x, y)
+    document.body.appendChild(this.myNameText)
+
     // draw image from the top left
-    this.anchorPoint.set(0, 0)
+    this.anchorPoint.set(0.5, 0.5)
 
     // max walking & jumping speed
     const X_MAX_VELOCITY = 10
@@ -143,12 +152,27 @@ class PlayerEntity extends Entity {
     // with the call throttled fn since this
     // callback fires hyperfrequently
     updateMyLocation(this.pos.x, this.pos.y)
+    this.updateLabelPosition(this.pos.x, this.pos.y)
 
     // call the parent method
     return super.update(dt) || this.body.vel.x !== 0 || this.body.vel.y !== 0
   }
 
-  onDestroyEvent() {}
+  updateLabelPosition(worldX, worldY) {
+    const VERTICAL_PADDING = 10
+    const localCoord = game.viewport.worldToLocal(
+      worldX + SELF_REPRESENTATION_SIZE / 2,
+      worldY + SELF_REPRESENTATION_SIZE + VERTICAL_PADDING
+    )
+    const globalCoord = localToGlobal(localCoord.x, localCoord.y)
+    this.myNameText.style.top = `${globalCoord.y}px`
+    this.myNameText.style.left = `${globalCoord.x}px`
+  }
+
+  onDestroyEvent() {
+    // remove the label from the DOM
+    this.myNameText.remove()
+  }
 
   /**
    * colision handler
@@ -165,11 +189,6 @@ class PlayerEntity extends Entity {
     ) {
       return false
     } else return true
-  }
-
-  draw(renderer, rect) {
-    // console.log(rect.pos.x, rect.pos.y)
-    return super.draw(renderer, rect)
   }
 }
 

@@ -9,6 +9,7 @@ import DataManifest from 'manifest.js'
 import BackgroundEntity from './js/renderables/background'
 import { NAME_KEY, myself, IMAGE_KEY, LOCATION_KEY } from './gun2'
 import pickRandomImage from './selfRepresentation'
+import localToGlobal from './coord'
 
 // SPAWN POINT
 const SPAWN_X = 3852
@@ -49,6 +50,7 @@ nameButton.addEventListener('click', () => {
     image: artistaImage,
   })
   me.game.world.addChild(mainPlayer, 4)
+
   // now cache and broadcast to peers too
   myself.put({
     [IMAGE_KEY]: artistaImage,
