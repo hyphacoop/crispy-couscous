@@ -37,13 +37,52 @@ body {
 }
 
 #welcome {
-  text-align: center;
+  border: 1px solid #707070;
   background: white;
-  color: #222;
+  color: #707070;
   font-family: sans-serif;
   padding: 40px;
   width: 50vw;
   margin: 0 auto;
+}
+#welcome h1 {
+  font-size: 40px;
+  line-height: 57px;
+  margin: 0;
+}
+#welcome p {
+  font-size: 28px;
+  line-height: 34px;
+  margin: 0 0 100px 0;
+}
+#welcome label {
+  font-size: 32px;
+  line-height: 39px;
+  font-weight: bold;  
+}
+#welcome input {
+  margin: 20px 0 0 0;
+  font-weight: normal;
+  font-size: 28px;
+  line-height: 35px;
+  width: 100%;
+  padding: 4px 12px;
+  color: #707070;
+  box-sizing: border-box;
+}
+#welcome .button-wrapper {
+  width: 100%;
+  margin: 100px 0 0 0;
+  display: flex;
+  justify-content: center;
+}
+#welcome button {
+  font-weight: normal;
+  font-size: 28px;
+  line-height: 35px;
+  padding: 4px 12px;
+  color: #707070;
+  box-sizing: border-box;
 }
 
 .name-label {
