@@ -1,7 +1,7 @@
-const AVATAR_SIZE = 220
+const SELF_REPRESENTATION_SIZE = 220
 
 export {
-  AVATAR_SIZE
+  SELF_REPRESENTATION_SIZE
 }
 
 const images = [

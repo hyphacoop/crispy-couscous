@@ -9,9 +9,6 @@ class BackgroundEntity extends Entity {
     super(x, y, settings)
     // don't let gravity affect the object
     this.body.ignoreGravity = true
-
-    this.renderable.addAnimation('normal', [0])
-    this.renderable.setCurrentAnimation('normal')
   }
 
   /**

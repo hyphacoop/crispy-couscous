@@ -49,19 +49,4 @@
    <polygon points="0,0 132,-100 58,-196 -66,-94"/>
   </object>
  </objectgroup>
- <objectgroup color="#127f0d" id="4" name="mainPlayer">
-  <properties>
-   <property name="z" type="int" value="2"/>
-  </properties>
-  <object id="19" name="mainPlayer" x="3852.84" y="7723.42" width="224.405" height="221.74">
-   <properties>
-    <property name="frameheight" type="int" value="250"/>
-    <property name="framewidth" type="int" value="250"/>
-    <property name="height" type="int" value="250"/>
-    <property name="image" value="avatar-01"/>
-    <property name="width" type="int" value="250"/>
-   </properties>
-   <polygon points="0,0 224.405,0 224.405,221.74 0,221.74"/>
-  </object>
- </objectgroup>
 </map>

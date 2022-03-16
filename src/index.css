@@ -1,31 +1,47 @@
 body {
+  background-color: black;
+  color: white;
 
-    background-color: black;
-    color: white;
+  /* Allow mouse dragging. */
+  -moz-user-select: none;
+  -ms-user-select: none;
+  -o-user-select: none;
+  -webkit-user-select: none;
+  user-select: none;
 
-    /* Allow mouse dragging. */
-    -moz-user-select: none;
-    -ms-user-select: none;
-    -o-user-select: none;
-    -webkit-user-select: none;
-    user-select: none;
+  /* disable touch panning/zooming */
+  -ms-touch-action: none;
+  touch-action: none;
 
-    /* disable touch panning/zooming */
-    -ms-touch-action: none;
-    touch-action: none;
-
-    /* Allow canvas to hit the edges of the browser viewport. */
-    margin: 0;
+  /* Allow canvas to hit the edges of the browser viewport. */
+  margin: 0;
 }
 
-/* #screen {
-  margin: 0 auto;
-  width: 900px;
-  height: 900px;
-} */
-
 #screen canvas {
-    margin: auto;
-    /* Hide the gap for font descenders. */
-    display: block;
+  margin: auto;
+  /* Hide the gap for font descenders. */
+  display: block;
+}
+
+#overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  margin: 0;
+  padding: 0;
+  background: rgba(0, 0, 0, 0.3);
+  display: flex;
+  align-items: center;
+}
+
+#welcome {
+  text-align: center;
+  background: white;
+  color: #222;
+  font-family: sans-serif;
+  padding: 40px;
+  width: 50vw;
+  margin: 0 auto;
 }

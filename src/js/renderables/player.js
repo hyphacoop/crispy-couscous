@@ -1,11 +1,11 @@
-import { input, game, Entity, Vector2d } from 'melonjs/dist/melonjs.module.js'
+import { input, game, Entity } from 'melonjs/dist/melonjs.module.js'
 import throttle from 'lodash.throttle'
 import { myself, LOCATION_KEY } from '../../gun2'
-import pickRandomImage, { AVATAR_SIZE } from '../../pickRandomImage'
+import pickRandomImage, { SELF_REPRESENTATION_SIZE } from '../../selfRepresentation'
 
 // a number that limits the write speed of
 // location updates to something reasonable
-const THROTTLE_TO_MS = 100
+const THROTTLE_TO_MS = 50
 const updateMyLocation = throttle((x, y) => {
   myself.put({ [LOCATION_KEY]: { x, y } })
 }, THROTTLE_TO_MS)
@@ -18,12 +18,13 @@ class PlayerEntity extends Entity {
     // call the parent constructor
     super(x, y, {
       ...settings,
-      image: pickRandomImage(),
-      width: AVATAR_SIZE,
-      height: AVATAR_SIZE,
-      framewidth: AVATAR_SIZE,
-      frameheight: AVATAR_SIZE,
+      width: SELF_REPRESENTATION_SIZE,
+      height: SELF_REPRESENTATION_SIZE,
+      framewidth: SELF_REPRESENTATION_SIZE,
+      frameheight: SELF_REPRESENTATION_SIZE,
     })
+
+    this.artistaName = settings.artistaName
 
     // draw image from the top left
     this.anchorPoint.set(0, 0)
@@ -164,6 +165,11 @@ class PlayerEntity extends Entity {
     ) {
       return false
     } else return true
+  }
+
+  draw(renderer, rect) {
+    // console.log(rect.pos.x, rect.pos.y)
+    return super.draw(renderer, rect)
   }
 }
 

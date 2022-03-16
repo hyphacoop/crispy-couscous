@@ -1,4 +1,5 @@
 import Gun from 'gun/gun'
+import 'gun/lib/load.js'
 
 // const RELAY_ADDRESS = 'http://localhost:8080/gun'
 const RELAY_ADDRESS = 'https://hypha-gun-relay.herokuapp.com/gun'
@@ -7,6 +8,8 @@ const gun = Gun(RELAY_ADDRESS)
 const LOCALSTORAGE_ME_KEY = 'ME_KEY'
 const ARTISTAS_KEY = 'artistas'
 const LOCATION_KEY = 'location'
+const NAME_KEY = 'artistaName'
+const IMAGE_KEY = 'artistaImage'
 
 const artistas = gun.get(ARTISTAS_KEY)
 
@@ -36,12 +39,21 @@ function subscribeToArtistas(callback) {
       return id === myselfId ? undefined : data
     })
     // once per artista, including those that are added over time
-    .once((_data, id) => {
-      const artista = artistas.get(id)
+    .on((data, id) => {
+      // data could have values, or be null
+      if (data) {
+        artistas.get(id).load((values) => {
+          callback(id, values)
+        })
+      } else {
+        // clear user
+      }
+      // const artista = artistas.get(id)
+      // console.log('on data', data, id)
       // listen to all changes to location
-      artista.get(LOCATION_KEY).on((locationData) => {
-        callback(id, locationData.x, locationData.y)
-      })
+      // artista.get(LOCATION_KEY).on((locationData) => {
+      //   callback(id, locationData.x, locationData.y)
+      // })
     })
 }
 
@@ -54,4 +66,6 @@ export {
   LOCALSTORAGE_ME_KEY,
   ARTISTAS_KEY,
   LOCATION_KEY,
+  NAME_KEY,
+  IMAGE_KEY,
 }
