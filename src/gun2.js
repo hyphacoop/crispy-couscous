@@ -43,6 +43,12 @@ function subscribeToArtistas(callback) {
       // data could have values, or be null
       if (data) {
         artistas.get(id).load((values) => {
+          if (
+            typeof values[LOCATION_KEY].y !== 'number' ||
+            typeof values[LOCATION_KEY].x !== 'number'
+          ) {
+            return
+          }
           callback(id, values)
         })
       } else {
