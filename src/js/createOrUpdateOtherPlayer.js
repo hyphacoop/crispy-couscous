@@ -1,4 +1,5 @@
 import { game } from 'melonjs/dist/melonjs.module.js'
+import pickRandomImage, { AVATAR_SIZE } from '../pickRandomImage'
 import OtherPlayer from './renderables/otherplayer'
 
 const artistasPlayers = {}
@@ -7,14 +8,14 @@ function createOrUpdateOtherPlayer(id, x, y) {
   // find or create a new OtherPlayer type...
   let artistaPlayer = artistasPlayers[id]
   if (!artistaPlayer) {
-    // artistaPlayer = new OtherPlayer(locationData.x, locationData.y, {
+    const avatarSize = 220
     artistaPlayer = new OtherPlayer(x, y, {
       name: `other-player-${id}`,
-      image: 'pegah-avatar',
-      width: 309,
-      height: 396,
-      framewidth: 309,
-      frameheight: 396,
+      image: pickRandomImage(),
+      width: AVATAR_SIZE,
+      height: AVATAR_SIZE,
+      framewidth: AVATAR_SIZE,
+      frameheight: AVATAR_SIZE,
     })
     artistasPlayers[id] = artistaPlayer
     game.world.addChild(artistaPlayer, 5)
@@ -22,11 +23,11 @@ function createOrUpdateOtherPlayer(id, x, y) {
   } else {
     artistaPlayer.pos.x = x
     artistaPlayer.pos.y = y
-    console.log(
-      id,
-      'updated peer location data',
-      JSON.stringify({ x: x, y: y })
-    )
+    // console.log(
+    //   id,
+    //   'updated peer location data',
+    //   JSON.stringify({ x: x, y: y })
+    // )
   }
 }
 

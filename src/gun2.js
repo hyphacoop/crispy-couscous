@@ -4,12 +4,16 @@ import Gun from 'gun/gun'
 const RELAY_ADDRESS = 'https://hypha-gun-relay.herokuapp.com/gun'
 const gun = Gun(RELAY_ADDRESS)
 
-
 const LOCALSTORAGE_ME_KEY = 'ME_KEY'
 const ARTISTAS_KEY = 'artistas'
 const LOCATION_KEY = 'location'
 
 const artistas = gun.get(ARTISTAS_KEY)
+
+// uncomment this to reset all the peoples
+// artistas.map().once((data, id) => {
+//   artistas.get(id).put(null)
+// })
 
 // check if I've visited before.
 // re-use my id if so.
@@ -51,4 +55,3 @@ export {
   ARTISTAS_KEY,
   LOCATION_KEY,
 }
-

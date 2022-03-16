@@ -1,6 +1,7 @@
 import { input, game, Entity, Vector2d } from 'melonjs/dist/melonjs.module.js'
 import throttle from 'lodash.throttle'
 import { myself, LOCATION_KEY } from '../../gun2'
+import pickRandomImage, { AVATAR_SIZE } from '../../pickRandomImage'
 
 // a number that limits the write speed of
 // location updates to something reasonable
@@ -15,7 +16,14 @@ class PlayerEntity extends Entity {
    */
   constructor(x, y, settings) {
     // call the parent constructor
-    super(x, y, settings)
+    super(x, y, {
+      ...settings,
+      image: pickRandomImage(),
+      width: AVATAR_SIZE,
+      height: AVATAR_SIZE,
+      framewidth: AVATAR_SIZE,
+      frameheight: AVATAR_SIZE,
+    })
 
     // draw image from the top left
     this.anchorPoint.set(0, 0)
