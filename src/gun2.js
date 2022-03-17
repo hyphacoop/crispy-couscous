@@ -58,6 +58,7 @@ function subscribeToArtistas(callback) {
       if (data && data[LOCATION_KEY]) {
         artistas.get(id).load((values) => {
           if (
+            !values ||
             typeof values[LOCATION_KEY] !== 'object' ||
             typeof values[LOCATION_KEY].y !== 'number' ||
             typeof values[LOCATION_KEY].x !== 'number'
