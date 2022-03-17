@@ -5,7 +5,7 @@ const CopyWebpackPlugin = require('copy-webpack-plugin');
 require("@babel/register");
 
 module.exports = {
-  entry: ['./src/index.js'],
+  entry: ['babel-polyfill', './src/index.js'],
   output: {
     path: __dirname + '/public',
     filename: 'bundle.js'

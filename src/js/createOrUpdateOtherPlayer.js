@@ -2,6 +2,7 @@ import { game } from 'melonjs/dist/melonjs.module.js'
 import { checkForOpenCall, createRecordOfOpenCall } from '../calls'
 import getMainPlayer from '../getMainPlayer'
 import { IMAGE_KEY, LOCATION_KEY, NAME_KEY } from '../gun2'
+import { getStream } from '../myStream'
 import { SELF_REPRESENTATION_SIZE } from '../selfRepresentation'
 import OtherPlayer from './renderables/otherplayer'
 
@@ -35,32 +36,20 @@ function createOrUpdateOtherPlayer(id, details) {
 
       if (!checkForOpenCall(id)) {
         console.log('we should call this peer, trying...')
-        var getUserMedia =
-          navigator.getUserMedia ||
-          navigator.webkitGetUserMedia ||
-          navigator.mozGetUserMedia
-        getUserMedia(
-          { video: false, audio: true },
-          (stream) => {
-            mainPlayer.stream = stream
-            const call = mainPlayer.peer.call(id, mainPlayer.stream)
-            if (call) {
-              call.on('stream', (remoteStream) => {
-                createRecordOfOpenCall(id)
-                const audio = document.createElement('audio')
-                audio.srcObject = remoteStream
-                audio.autoplay = true
-                audio.style.display = 'hidden'
-                document.body.appendChild(audio)
-              })
-            } else {
-              console.log('why is there no call?')
-            }
-          },
-          (err) => {
-            console.error('Failed to get local stream', err)
-          }
-        )
+        const stream = getStream()
+        const call = mainPlayer.peer.call(id, stream)
+        if (call) {
+          call.on('stream', (remoteStream) => {
+            createRecordOfOpenCall(id)
+            const audio = document.createElement('audio')
+            audio.srcObject = remoteStream
+            audio.autoplay = true
+            audio.style.display = 'hidden'
+            document.body.appendChild(audio)
+          })
+        } else {
+          console.log('why is there no call?')
+        }
       } else {
         console.log('there is already an open call with this peer')
       }

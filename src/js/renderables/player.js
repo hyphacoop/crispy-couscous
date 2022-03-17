@@ -43,10 +43,6 @@ class PlayerEntity extends Entity {
 
     // audio
     this.peer = new Peer(this.id)
-    var getUserMedia =
-      navigator.getUserMedia ||
-      navigator.webkitGetUserMedia ||
-      navigator.mozGetUserMedia
     var that = this
 
     that.peer.on('call', (call) => {
@@ -54,33 +50,24 @@ class PlayerEntity extends Entity {
       // the call because the call could come in first
       // and we don't want to miss it, but we
       // need access to the media stream to pick up
-      getUserMedia(
-        { video: false, audio: true },
-        (stream) => {
-          that.stream = stream
-          // debugger
-          console.log('receiving a call from', call.peer)
-          if (!checkForOpenCall(call.peer)) {
-            console.log('there was no open call with ', call.peer)
-            console.log('now accepting...')
-            call.answer(stream) // Answer the call with an A/V stream.
-            call.on('stream', function (remoteStream) {
-              console.log('receiving an audio stream from', call.peer)
-              createRecordOfOpenCall(call.peer)
-              const audio = document.createElement('audio')
-              audio.srcObject = remoteStream
-              audio.autoplay = true
-              audio.style.display = 'hidden'
-              document.body.appendChild(audio)
-            })
-          } else {
-            console.log('there was already an open call with', call.peer)
-          }
-        },
-        (err) => {
-          console.error('Failed to get local stream', err)
-        }
-      )
+      const stream = getStream()
+      console.log('receiving a call from', call.peer)
+      if (!checkForOpenCall(call.peer)) {
+        console.log('there was no open call with ', call.peer)
+        console.log('now accepting...')
+        call.answer(stream) // Answer the call with my audio (& video) stream
+        call.on('stream', function (remoteStream) {
+          console.log('receiving an audio stream from', call.peer)
+          createRecordOfOpenCall(call.peer)
+          const audio = document.createElement('audio')
+          audio.srcObject = remoteStream
+          audio.autoplay = true
+          audio.style.display = 'hidden'
+          document.body.appendChild(audio)
+        })
+      } else {
+        console.log('there was already an open call with', call.peer)
+      }
     })
 
     // label
