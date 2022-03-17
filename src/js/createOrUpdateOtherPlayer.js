@@ -29,17 +29,19 @@ function createOrUpdateOtherPlayer(id, details) {
     // keep my self-representation above all the others
     // for me, in terms of zIndex
     const mainPlayer = getMainPlayer()
-    game.world.moveToTop(mainPlayer)
-    if (!checkForOpenCall(id)) {
-      const call = mainPlayer.peer.call(id, mainPlayer.stream)
-      call.on('stream', (remoteStream) => {
-        createRecordOfOpenCall(id)
-        const audio = document.createElement('audio')
-        audio.srcObject = remoteStream
-        audio.autoplay = true
-        audio.style.display = 'hidden'
-        document.body.appendChild(audio)
-      })
+    if (mainPlayer) {
+      game.world.moveToTop(mainPlayer)
+      if (!checkForOpenCall(id)) {
+        const call = mainPlayer.peer.call(id, mainPlayer.stream)
+        call.on('stream', (remoteStream) => {
+          createRecordOfOpenCall(id)
+          const audio = document.createElement('audio')
+          audio.srcObject = remoteStream
+          audio.autoplay = true
+          audio.style.display = 'hidden'
+          document.body.appendChild(audio)
+        })
+      }
     }
   } else {
     artistaPlayer.pos.x = details[LOCATION_KEY].x
