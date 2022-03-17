@@ -47,14 +47,18 @@ class PlayerEntity extends Entity {
       navigator.getUserMedia ||
       navigator.webkitGetUserMedia ||
       navigator.mozGetUserMedia
-
     var that = this
-    getUserMedia(
-      { video: false, audio: true },
-      (stream) => {
-        console.log('got my stream')
-        that.stream = stream
-        that.peer.on('call', (call) => {
+
+    that.peer.on('call', (call) => {
+      // we have to getUserMedia inside
+      // the call because the call could come in first
+      // and we don't want to miss it, but we
+      // need access to the media stream to pick up
+      getUserMedia(
+        { video: false, audio: true },
+        (stream) => {
+          console.log('got my stream')
+          that.stream = stream
           console.log('receiving a call from', call.peer.id)
           if (!checkForOpenCall(call.peer.id)) {
             console.log('there was no open call with ', call.peer.id)
@@ -68,18 +72,17 @@ class PlayerEntity extends Entity {
               audio.autoplay = true
               audio.style.display = 'hidden'
               document.body.appendChild(audio)
-              // Show stream in some video/canvas element.
             })
           } else {
             console.log('there was already an open call with', call.peer.id)
             console.log('this seems to be in error')
           }
-        })
-      },
-      (err) => {
-        console.error('Failed to get local stream', err)
-      }
-    )
+        },
+        (err) => {
+          console.error('Failed to get local stream', err)
+        }
+      )
+    })
 
     // label
     this.myNameText = document.createElement('div')

@@ -30,23 +30,38 @@ function createOrUpdateOtherPlayer(id, details) {
     // for me, in terms of zIndex
     const mainPlayer = getMainPlayer()
     if (mainPlayer) {
-      console.log('we have mainPlayer, so lets see about calling this peer')
       game.world.moveToTop(mainPlayer)
+      console.log('we have mainPlayer, so lets see about calling this peer')
+
       if (!checkForOpenCall(id)) {
         console.log('we should call this peer, trying...')
-        const call = mainPlayer.peer.call(id, mainPlayer.stream)
-        if (call) {
-          call.on('stream', (remoteStream) => {
-            createRecordOfOpenCall(id)
-            const audio = document.createElement('audio')
-            audio.srcObject = remoteStream
-            audio.autoplay = true
-            audio.style.display = 'hidden'
-            document.body.appendChild(audio)
-          })
-        } else {
-          console.log('why is there no call?')
-        }
+        var getUserMedia =
+          navigator.getUserMedia ||
+          navigator.webkitGetUserMedia ||
+          navigator.mozGetUserMedia
+        getUserMedia(
+          { video: false, audio: true },
+          (stream) => {
+            console.log('got my stream')
+            mainPlayer.stream = stream
+            const call = mainPlayer.peer.call(id, mainPlayer.stream)
+            if (call) {
+              call.on('stream', (remoteStream) => {
+                createRecordOfOpenCall(id)
+                const audio = document.createElement('audio')
+                audio.srcObject = remoteStream
+                audio.autoplay = true
+                audio.style.display = 'hidden'
+                document.body.appendChild(audio)
+              })
+            } else {
+              console.log('why is there no call?')
+            }
+          },
+          (err) => {
+            console.error('Failed to get local stream', err)
+          }
+        )
       } else {
         console.log('there is already an open call with this peer')
       }
