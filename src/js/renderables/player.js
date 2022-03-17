@@ -4,26 +4,33 @@ import throttle from 'lodash.throttle'
 import { myself, LOCATION_KEY, LAST_SEEN_KEY } from '../../gun2'
 import { SELF_REPRESENTATION_SIZE } from '../../selfRepresentation'
 import localToGlobal from '../../coord'
-import { checkForOpenCall, createRecordOfOpenCall } from '../../calls'
+import {
+  adjustVolumeForAll,
+  checkForOpenCall,
+  createAudioForCall,
+} from '../../calls'
 import { getStream } from '../../myStream'
+import { OTHER_PLAYER_NAME } from './otherplayer'
 
 // a number that limits the write speed of
 // location updates to something reasonable
 const THROTTLE_TO_MS = 50
 const updateMyLocation = throttle((x, y) => {
   myself.put({ [LOCATION_KEY]: { x, y }, [LAST_SEEN_KEY]: Date.now() })
+  // since my location is changing, I should adjust volumes
+  adjustVolumeForAll()
 }, THROTTLE_TO_MS)
 
 // remove me when the window closes
-window.addEventListener('visibilitychange', function () {
-  // remove my location from gun cache
-  if (document.visibilityState === 'hidden') {
-    console.log('became hidden')
-    myself.put({ [LOCATION_KEY]: null })
-  } else {
-    // refresh?
-  }
-})
+// window.addEventListener('visibilitychange', function () {
+//   // remove my location from gun cache
+//   if (document.visibilityState === 'hidden') {
+//     console.log('window became hidden')
+//     myself.put({ [LOCATION_KEY]: null })
+//   } else {
+//     // refresh?
+//   }
+// })
 
 class PlayerEntity extends Entity {
   /**
@@ -46,6 +53,7 @@ class PlayerEntity extends Entity {
     this.peer = new Peer(this.id)
     var that = this
 
+    // when I get a "call" automatically "pick up"
     that.peer.on('call', (call) => {
       // we have to getUserMedia inside
       // the call because the call could come in first
@@ -56,15 +64,11 @@ class PlayerEntity extends Entity {
       if (!checkForOpenCall(call.peer)) {
         console.log('there was no open call with ', call.peer)
         console.log('now accepting...')
-        call.answer(stream) // Answer the call with my audio (& video) stream
+        // Answer the call with my audio (& video) stream
+        call.answer(stream)
         call.on('stream', function (remoteStream) {
-          console.log('receiving an audio stream from', call.peer)
-          createRecordOfOpenCall(call.peer)
-          const audio = document.createElement('audio')
-          audio.srcObject = remoteStream
-          audio.autoplay = true
-          audio.style.display = 'hidden'
-          document.body.appendChild(audio)
+          const id = call.peer
+          createAudioForCall(id, remoteStream)
         })
       } else {
         console.log('there was already an open call with', call.peer)
@@ -230,7 +234,7 @@ class PlayerEntity extends Entity {
       return true
     } else if (
       other.name === 'background' ||
-      other.name.includes('other-player-')
+      other.name.includes(OTHER_PLAYER_NAME)
     ) {
       return false
     } else return true

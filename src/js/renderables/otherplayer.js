@@ -2,6 +2,17 @@ import { Body, Rect, Sprite, game } from 'melonjs/dist/melonjs.module.js'
 import localToGlobal from '../../coord'
 import { SELF_REPRESENTATION_SIZE } from '../../selfRepresentation'
 
+const OTHER_PLAYER_NAME = 'other-player-'
+
+function otherPlayerName(id) {
+  return `${OTHER_PLAYER_NAME}${id}`
+}
+
+export {
+  OTHER_PLAYER_NAME,
+  otherPlayerName
+}
+
 class OtherPlayer extends Sprite {
   /**
    * constructor

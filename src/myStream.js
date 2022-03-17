@@ -1,3 +1,8 @@
+/*
+  A global variable for the local audio/video
+  stream, after it's been approved by the user.
+*/
+
 let stream
 
 export function setStream(s) {
@@ -7,7 +12,6 @@ export function setStream(s) {
 export function getStream() {
   return stream
 }
-
 
 export function getUserMedia() {
   return new Promise((resolve, reject) => {
@@ -27,21 +31,3 @@ export function getUserMedia() {
     )
   })
 }
-
-/*
-mainPlayer.stream = stream
-const call = mainPlayer.peer.call(id, mainPlayer.stream)
-if (call) {
-  call.on('stream', (remoteStream) => {
-    createRecordOfOpenCall(id)
-    const audio = document.createElement('audio')
-    audio.srcObject = remoteStream
-    audio.autoplay = true
-    audio.style.display = 'hidden'
-    document.body.appendChild(audio)
-  })
-} else {
-  console.log('why is there no call?')
-}
-
-*/

@@ -104,7 +104,6 @@ const bindKeyboardListeners = () => {
 
 ;(async () => {
   try {
-    console.log('test')
     const stream = await getUserMedia()
     setStream(stream)
     me.device.onReady(() => {
@@ -168,6 +167,9 @@ const bindKeyboardListeners = () => {
     })
   } catch (e) {
     // there was a fundamental error
-    console.log(e)
+    console.error(e)
+    alert(
+      'Unable to enter the space, because there is no access to audio/video'
+    )
   }
 })()

@@ -1,10 +1,14 @@
 import { game } from 'melonjs/dist/melonjs.module.js'
-import { checkForOpenCall, createRecordOfOpenCall } from '../calls'
+import {
+  adjustVolumeForOne,
+  checkForOpenCall,
+  createAudioForCall,
+} from '../calls'
 import getMainPlayer from '../getMainPlayer'
 import { IMAGE_KEY, LAST_SEEN_KEY, LOCATION_KEY, NAME_KEY } from '../gun2'
 import { getStream } from '../myStream'
 import { SELF_REPRESENTATION_SIZE } from '../selfRepresentation'
-import OtherPlayer from './renderables/otherplayer'
+import OtherPlayer, { otherPlayerName } from './renderables/otherplayer'
 
 const artistasPlayers = {}
 
@@ -15,16 +19,25 @@ const ONE_MINUTE = 1000 * 60
 function createOrUpdateOtherPlayer(id, details) {
   let artistaPlayer = artistasPlayers[id]
   if (artistaPlayer) {
-    // update this players location
-    artistaPlayer.pos.x = details[LOCATION_KEY].x
-    artistaPlayer.pos.y = details[LOCATION_KEY].y
+    // update this players location, if its new
+    if (
+      artistaPlayer.pos.x !== details[LOCATION_KEY].x ||
+      artistaPlayer.pos.y !== details[LOCATION_KEY].y
+    ) {
+      artistaPlayer.pos.x = details[LOCATION_KEY].x
+      artistaPlayer.pos.y = details[LOCATION_KEY].y
+      // check first, just in case
+      // there's no channel with this player open
+      // yet
+      if (checkForOpenCall(id)) adjustVolumeForOne(id)
+    }
   } else if (Date.now() - details[LAST_SEEN_KEY] < ONE_MINUTE) {
     // create a new player, if their data is recent enough
     artistaPlayer = new OtherPlayer(
       details[LOCATION_KEY].x,
       details[LOCATION_KEY].y,
       {
-        name: `other-player-${id}`,
+        name: otherPlayerName(id),
         artistaName: details[NAME_KEY],
         image: details[IMAGE_KEY],
         width: SELF_REPRESENTATION_SIZE,
@@ -51,19 +64,13 @@ function createOrUpdateOtherPlayer(id, details) {
           // when the other player "picks up"
           call.on('stream', (remoteStream) => {
             console.log('received an answer from ', id)
-            console.log('opening audio feed...')
-            createRecordOfOpenCall(id)
-            const audio = document.createElement('audio')
-            audio.srcObject = remoteStream
-            audio.autoplay = true
-            audio.style.display = 'hidden'
-            document.body.appendChild(audio)
+            createAudioForCall(id, remoteStream)
           })
         } else {
           console.log('why is there no call?')
         }
       } else {
-        console.log('there is already an open call with peer ', id)
+        console.log('skipping, there is already an open call with peer ', id)
       }
     } else {
       console.log('we dont have mainPlayer, skipping...')
