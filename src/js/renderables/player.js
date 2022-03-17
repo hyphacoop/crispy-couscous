@@ -57,16 +57,16 @@ class PlayerEntity extends Entity {
       getUserMedia(
         { video: false, audio: true },
         (stream) => {
-          console.log('got my stream')
           that.stream = stream
-          console.log('receiving a call from', call.peer.id)
-          if (!checkForOpenCall(call.peer.id)) {
-            console.log('there was no open call with ', call.peer.id)
+          // debugger
+          console.log('receiving a call from', call.peer)
+          if (!checkForOpenCall(call.peer)) {
+            console.log('there was no open call with ', call.peer)
             console.log('now accepting...')
             call.answer(stream) // Answer the call with an A/V stream.
             call.on('stream', function (remoteStream) {
-              console.log('receiving an audio stream from', call.peer.id)
-              createRecordOfOpenCall(call.peer.id)
+              console.log('receiving an audio stream from', call.peer)
+              createRecordOfOpenCall(call.peer)
               const audio = document.createElement('audio')
               audio.srcObject = remoteStream
               audio.autoplay = true
@@ -74,8 +74,7 @@ class PlayerEntity extends Entity {
               document.body.appendChild(audio)
             })
           } else {
-            console.log('there was already an open call with', call.peer.id)
-            console.log('this seems to be in error')
+            console.log('there was already an open call with', call.peer)
           }
         },
         (err) => {

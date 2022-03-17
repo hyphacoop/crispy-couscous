@@ -59,7 +59,7 @@ function subscribeToArtistas(callback) {
         artistas.get(id).load((values) => {
           if (
             !values ||
-            typeof values[LOCATION_KEY] !== 'object' ||
+            !values[LOCATION_KEY] ||
             typeof values[LOCATION_KEY].y !== 'number' ||
             typeof values[LOCATION_KEY].x !== 'number'
           ) {

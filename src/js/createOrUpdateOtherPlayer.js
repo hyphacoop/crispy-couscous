@@ -42,7 +42,6 @@ function createOrUpdateOtherPlayer(id, details) {
         getUserMedia(
           { video: false, audio: true },
           (stream) => {
-            console.log('got my stream')
             mainPlayer.stream = stream
             const call = mainPlayer.peer.call(id, mainPlayer.stream)
             if (call) {
