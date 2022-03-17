@@ -1,4 +1,3 @@
-import { game } from 'melonjs/dist/melonjs.module'
 import Gun from 'gun/gun'
 import 'gun/lib/load.js'
 import { removePlayer } from './js/createOrUpdateOtherPlayer'
@@ -10,6 +9,7 @@ const gun = Gun(RELAY_ADDRESS)
 const LOCALSTORAGE_ME_KEY = 'ME_KEY'
 const ARTISTAS_KEY = 'artistas'
 const LOCATION_KEY = 'location'
+const LAST_SEEN_KEY = 'lastseen' // a unix timestamp
 const NAME_KEY = 'artistaName'
 const IMAGE_KEY = 'artistaImage'
 
@@ -89,6 +89,7 @@ export {
   LOCALSTORAGE_ME_KEY,
   ARTISTAS_KEY,
   LOCATION_KEY,
+  LAST_SEEN_KEY,
   NAME_KEY,
   IMAGE_KEY,
 }

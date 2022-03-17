@@ -1,16 +1,17 @@
 import Peer from 'peerjs'
 import { input, game, Entity } from 'melonjs/dist/melonjs.module.js'
 import throttle from 'lodash.throttle'
-import { myself, LOCATION_KEY } from '../../gun2'
+import { myself, LOCATION_KEY, LAST_SEEN_KEY } from '../../gun2'
 import { SELF_REPRESENTATION_SIZE } from '../../selfRepresentation'
 import localToGlobal from '../../coord'
 import { checkForOpenCall, createRecordOfOpenCall } from '../../calls'
+import { getStream } from '../../myStream'
 
 // a number that limits the write speed of
 // location updates to something reasonable
 const THROTTLE_TO_MS = 50
 const updateMyLocation = throttle((x, y) => {
-  myself.put({ [LOCATION_KEY]: { x, y } })
+  myself.put({ [LOCATION_KEY]: { x, y }, [LAST_SEEN_KEY]: Date.now() })
 }, THROTTLE_TO_MS)
 
 // remove me when the window closes
