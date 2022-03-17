@@ -15,13 +15,18 @@ import {
   IMAGE_KEY,
   LOCATION_KEY,
   IS_NEW_HERE,
+  subscribeToArtistas,
 } from './gun2'
 import pickRandomImage from './selfRepresentation'
+import createOrUpdateOtherPlayer from './js/createOrUpdateOtherPlayer'
+import { MAIN_PLAYER_NAME } from './getMainPlayer'
 
 // HACK this is just to filter out painfully verbose gunjs logs
 let oldConsoleLog = console.log
 console.log = (...args) => {
-  if (!args[0].includes('warning!') && !args[0].includes('Warning!')) {
+  if (typeof args[0] !== 'string') {
+    oldConsoleLog(...args)
+  } else if (!args[0].includes('warning!') && !args[0].includes('Warning!')) {
     oldConsoleLog(...args)
   }
 }
@@ -67,9 +72,10 @@ const addMyself = (name, image, id) => {
 
   // create my player
   const mainPlayer = new PlayerEntity(SPAWN_X, SPAWN_Y, {
+    name: MAIN_PLAYER_NAME,
     artistaName: name,
     image: image,
-    id: id
+    id: id,
   })
   me.game.world.addChild(mainPlayer, 4)
 
@@ -82,6 +88,9 @@ const addMyself = (name, image, id) => {
       y: SPAWN_Y,
     },
   })
+
+  // now that I'm 'alive' listen for other people
+  subscribeToArtistas(createOrUpdateOtherPlayer)
 }
 
 const bindKeyboardListeners = () => {

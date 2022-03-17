@@ -18,8 +18,6 @@ class PlayScreen extends Stage {
 
     const p = game.world.getChildByName('mainPlayer')[0]
     game.world.moveToTop(p)
-
-    subscribeToArtistas(createOrUpdateOtherPlayer)
   }
 
   // onDestroyEvent() {

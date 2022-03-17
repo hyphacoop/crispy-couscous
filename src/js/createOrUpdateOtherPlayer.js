@@ -30,18 +30,28 @@ function createOrUpdateOtherPlayer(id, details) {
     // for me, in terms of zIndex
     const mainPlayer = getMainPlayer()
     if (mainPlayer) {
+      console.log('we have mainPlayer, so lets see about calling this peer')
       game.world.moveToTop(mainPlayer)
       if (!checkForOpenCall(id)) {
+        console.log('we should call this peer, trying...')
         const call = mainPlayer.peer.call(id, mainPlayer.stream)
-        call.on('stream', (remoteStream) => {
-          createRecordOfOpenCall(id)
-          const audio = document.createElement('audio')
-          audio.srcObject = remoteStream
-          audio.autoplay = true
-          audio.style.display = 'hidden'
-          document.body.appendChild(audio)
-        })
+        if (call) {
+          call.on('stream', (remoteStream) => {
+            createRecordOfOpenCall(id)
+            const audio = document.createElement('audio')
+            audio.srcObject = remoteStream
+            audio.autoplay = true
+            audio.style.display = 'hidden'
+            document.body.appendChild(audio)
+          })
+        } else {
+          console.log('why is there no call?')
+        }
+      } else {
+        console.log('there is already an open call with this peer')
       }
+    } else {
+      console.log('we dont have mainPlayer, skipping...')
     }
   } else {
     artistaPlayer.pos.x = details[LOCATION_KEY].x

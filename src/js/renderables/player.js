@@ -4,7 +4,7 @@ import throttle from 'lodash.throttle'
 import { myself, LOCATION_KEY } from '../../gun2'
 import { SELF_REPRESENTATION_SIZE } from '../../selfRepresentation'
 import localToGlobal from '../../coord'
-import { createRecordOfOpenCall } from '../../calls'
+import { checkForOpenCall, createRecordOfOpenCall } from '../../calls'
 
 // a number that limits the write speed of
 // location updates to something reasonable
@@ -55,9 +55,13 @@ class PlayerEntity extends Entity {
         console.log('got my stream')
         that.stream = stream
         that.peer.on('call', (call) => {
+          console.log('receiving a call from', call.peer.id)
           if (!checkForOpenCall(call.peer.id)) {
+            console.log('there was no open call with ', call.peer.id)
+            console.log('now accepting...')
             call.answer(stream) // Answer the call with an A/V stream.
             call.on('stream', function (remoteStream) {
+              console.log('receiving an audio stream from', call.peer.id)
               createRecordOfOpenCall(call.peer.id)
               const audio = document.createElement('audio')
               audio.srcObject = remoteStream
@@ -66,6 +70,9 @@ class PlayerEntity extends Entity {
               document.body.appendChild(audio)
               // Show stream in some video/canvas element.
             })
+          } else {
+            console.log('there was already an open call with', call.peer.id)
+            console.log('this seems to be in error')
           }
         })
       },
