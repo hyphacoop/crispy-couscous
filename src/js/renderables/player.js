@@ -42,7 +42,7 @@ class PlayerEntity extends Entity {
     this.artistaName = settings.artistaName
 
     // audio
-    this.peer = new Peer('id')
+    this.peer = new Peer(this.id)
     var getUserMedia =
       navigator.getUserMedia ||
       navigator.webkitGetUserMedia ||

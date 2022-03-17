@@ -31,7 +31,7 @@ function createOrUpdateOtherPlayer(id, details) {
     const mainPlayer = getMainPlayer()
     game.world.moveToTop(mainPlayer)
     if (!checkForOpenCall(id)) {
-      const call = peer.call(id, mainPlayer.stream)
+      const call = mainPlayer.peer.call(id, mainPlayer.stream)
       call.on('stream', (remoteStream) => {
         createRecordOfOpenCall(id)
         const audio = document.createElement('audio')
