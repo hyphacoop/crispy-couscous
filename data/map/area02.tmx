@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.8" tiledversion="1.8.2" orientation="orthogonal" renderorder="right-down" width="125" height="118" tilewidth="32" tileheight="32" infinite="0" nextlayerid="25" nextobjectid="68">
+ <objectgroup id="9" name="background">
+  <properties>
+   <property name="z" type="int" value="1"/>
+  </properties>
+  <object id="26" name="background" x="0" y="0" width="3999" height="3763">
+   <properties>
+    <property name="frameheight" type="int" value="3763"/>
+    <property name="framewidth" type="int" value="4000"/>
+    <property name="image" value="room"/>
+   </properties>
+  </object>
+ </objectgroup>
+ <objectgroup id="6" name="collision">
+  <object id="60" x="-64" y="869" width="4180" height="56"/>
+  <object id="61" x="3984" y="872" width="48" height="2928"/>
+  <object id="63" x="-44" y="3744" width="4092" height="100"/>
+  <object id="64" x="-76" y="880" width="92" height="2936"/>
+ </objectgroup>
+ <objectgroup id="22" name="doorway">
+  <object id="58" name="doorway" x="1822" y="3590" width="440" height="170"/>
+ </objectgroup>
+</map>
