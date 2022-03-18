@@ -5,7 +5,14 @@ import {
   createAudioForCall,
 } from '../calls'
 import getMainPlayer from '../getMainPlayer'
-import { IMAGE_KEY, LAST_SEEN_KEY, LOCATION_KEY, NAME_KEY } from '../gun2'
+import {
+  IMAGE_KEY,
+  IN_STUDIO_KEY,
+  LAST_SEEN_KEY,
+  LOCATION_KEY,
+  NAME_KEY,
+} from '../gun2'
+import IS_STUDIO from '../isStudio'
 import { getStream } from '../myStream'
 import { SELF_REPRESENTATION_SIZE } from '../selfRepresentation'
 import OtherPlayer, { otherPlayerName } from './renderables/otherplayer'
@@ -31,7 +38,12 @@ function createOrUpdateOtherPlayer(id, details) {
       // yet
       if (checkForOpenCall(id)) adjustVolumeForOne(id)
     }
-  } else if (Date.now() - details[LAST_SEEN_KEY] < ONE_MINUTE) {
+  } else if (
+    // local player and remote player must both be either in the 'main building' or the 'studio'
+    details[IN_STUDIO_KEY] === IS_STUDIO &&
+    // remote players details must be recent, seen within the last minute
+    Date.now() - details[LAST_SEEN_KEY] < ONE_MINUTE
+  ) {
     // create a new player, if their data is recent enough
     artistaPlayer = new OtherPlayer(
       details[LOCATION_KEY].x,
@@ -84,6 +96,7 @@ function removePlayer(id) {
     game.world.removeChild(player)
   }
   delete artistasPlayers[id]
+  //TODO: remove their audio here as well
 }
 
 export { removePlayer }

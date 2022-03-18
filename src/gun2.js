@@ -6,12 +6,18 @@ import { removePlayer } from './js/createOrUpdateOtherPlayer'
 const RELAY_ADDRESS = 'https://hypha-gun-relay.herokuapp.com/gun'
 const gun = Gun(RELAY_ADDRESS)
 
+// localStorage keys
 const LOCALSTORAGE_ME_KEY = 'ME_KEY'
+
+// high level "gunjs" keys
 const ARTISTAS_KEY = 'artistas'
-const LOCATION_KEY = 'location'
+
+// property of player keys
+const IN_STUDIO_KEY = 'instudio' // boolean
+const LOCATION_KEY = 'location' // { x: number, y: number } | null
 const LAST_SEEN_KEY = 'lastseen' // a unix timestamp
-const NAME_KEY = 'artistaName'
-const IMAGE_KEY = 'artistaImage'
+const NAME_KEY = 'artistaName' // string
+const IMAGE_KEY = 'artistaImage' // string
 
 const artistas = gun.get(ARTISTAS_KEY)
 
@@ -88,6 +94,7 @@ export {
   subscribeToArtistas,
   LOCALSTORAGE_ME_KEY,
   ARTISTAS_KEY,
+  IN_STUDIO_KEY,
   LOCATION_KEY,
   LAST_SEEN_KEY,
   NAME_KEY,

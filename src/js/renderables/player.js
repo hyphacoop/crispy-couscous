@@ -11,6 +11,7 @@ import {
 } from '../../calls'
 import { getStream } from '../../myStream'
 import { OTHER_PLAYER_NAME } from './otherplayer'
+import IS_STUDIO from '../../isStudio'
 
 // a number that limits the write speed of
 // location updates to something reasonable
@@ -74,6 +75,11 @@ class PlayerEntity extends Entity {
         console.log('there was already an open call with', call.peer)
       }
     })
+
+    // used to store a temp reference
+    // if the user is currently switching from
+    // one room context to another
+    this.isLeaving = false
 
     // label
     this.myNameText = document.createElement('div')
@@ -232,6 +238,19 @@ class PlayerEntity extends Entity {
     // and other players
     if (!other.name) {
       return true
+    } else if (other.name === 'doorway') {
+      // exit the current space
+      // and enter the intended one
+      // use this.isLeaving to only trigger this once
+      if (!this.isLeaving) {
+        this.isLeaving = true
+        if (IS_STUDIO) {
+          window.location.href = window.location.href.replace('/studio.html', '?from-studio=true')
+        } else {
+          window.location.href = window.location.href.replace('?from-studio=true', '') + 'studio.html'
+        }
+      }
+      return false
     } else if (
       other.name === 'background' ||
       other.name.includes(OTHER_PLAYER_NAME)

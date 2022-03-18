@@ -1,10 +1,6 @@
-import {
-  Stage,
-  game,
-  level,
-} from 'melonjs/dist/melonjs.module.js'
-import createOrUpdateOtherPlayer from '../createOrUpdateOtherPlayer'
-import { subscribeToArtistas } from '../../gun2'
+import { Stage, game, level } from 'melonjs/dist/melonjs.module.js'
+
+import IS_STUDIO from '../../isStudio'
 
 class PlayScreen extends Stage {
   /**
@@ -12,8 +8,12 @@ class PlayScreen extends Stage {
    */
   onResetEvent() {
     // load a level
-    level.load('area01', {
-      setViewportBounds: true
+    const BUILDING = 'area01'
+    const STUDIO = 'area02'
+    const levelToLoad = IS_STUDIO ? STUDIO : BUILDING
+
+    level.load(levelToLoad, {
+      setViewportBounds: true,
     })
 
     const p = game.world.getChildByName('mainPlayer')[0]

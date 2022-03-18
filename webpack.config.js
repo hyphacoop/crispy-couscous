@@ -34,6 +34,12 @@ module.exports = {
         template: './src/index.html',
         hash: true
     }),
+    new HtmlWebpackPlugin({
+        template: './src/studio.html',
+        hash: true,
+        output: 'studio.html',
+        filename: 'studio.html'
+    }),
     new CopyWebpackPlugin({
         patterns: [
             {

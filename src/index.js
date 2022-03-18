@@ -1,7 +1,6 @@
 import * as me from 'melonjs/dist/melonjs.module.js'
 import 'index.css'
 
-import TitleScreen from 'js/stage/title.js'
 import PlayScreen from 'js/stage/play.js'
 import PlayerEntity from 'js/renderables/player.js'
 
@@ -16,11 +15,14 @@ import {
   LOCATION_KEY,
   IS_NEW_HERE,
   subscribeToArtistas,
+  IN_STUDIO_KEY,
 } from './gun2'
 import pickRandomImage from './selfRepresentation'
 import createOrUpdateOtherPlayer from './js/createOrUpdateOtherPlayer'
 import { MAIN_PLAYER_NAME } from './getMainPlayer'
 import { getUserMedia, setStream } from './myStream'
+import IS_STUDIO from './isStudio'
+import DoorwayEntity from './js/renderables/doorway'
 
 // HACK this is just to filter out painfully verbose gunjs logs
 let oldConsoleLog = console.log
@@ -32,9 +34,25 @@ console.log = (...args) => {
   }
 }
 
-// SPAWN POINT (in the doorway)
-const SPAWN_X = 3852
-const SPAWN_Y = 7723
+// SPAWN POINTS
+let SPAWN_X
+let SPAWN_Y
+const searchParams = new URLSearchParams(window.location.search)
+if (IS_STUDIO) {
+  SPAWN_X = 1930
+  SPAWN_Y = 3170
+} else if (searchParams.get('from-studio')) {
+  SPAWN_X = 2843
+  SPAWN_Y = 3753
+} else {
+  // main entryway to yard
+  SPAWN_X = 3852
+  SPAWN_Y = 7723
+}
+
+// these numbers define roughly the field-of-view
+const FOV_WIDTH = IS_STUDIO ? 3000 : 2000
+const FOV_HEIGHT = IS_STUDIO ? 3000 : 2000
 
 // DOM IDs
 const HTML_DIV_ID = 'screen'
@@ -67,7 +85,7 @@ const setupNameCollectorListeners = () => {
 
 const addMyself = (name, image, id) => {
   // clear the overlay
-  overlay.remove()
+  if (overlay) overlay.remove()
   // only now start listening for navigational keyboard events
   bindKeyboardListeners()
 
@@ -82,6 +100,7 @@ const addMyself = (name, image, id) => {
 
   // now cache and broadcast to peers too
   myself.put({
+    [IN_STUDIO_KEY]: IS_STUDIO,
     [IMAGE_KEY]: image,
     [NAME_KEY]: name,
     [LOCATION_KEY]: {
@@ -108,16 +127,11 @@ const bindKeyboardListeners = () => {
     setStream(stream)
     me.device.onReady(() => {
       // initialize the display canvas once the device/browser is ready
-      // const FULL_WIDTH = 8075
-      // const FULL_HEIGHT = 7300
-      // these numbers define roughly the field-of-view
-      const FULL_WIDTH = 2000
-      const FULL_HEIGHT = 2000
       if (
-        !me.video.init(FULL_WIDTH, FULL_HEIGHT, {
+        !me.video.init(FOV_WIDTH, FOV_HEIGHT, {
           parent: HTML_DIV_ID,
           scale: 'auto',
-          scaleMethod: 'flex-width',
+          // scaleMethod: 'flex-width',
         })
       ) {
         alert('Your browser does not support HTML5 canvas.')
@@ -146,12 +160,14 @@ const bindKeyboardListeners = () => {
       // set and load all resources.
       me.loader.preload(DataManifest, function () {
         // set the user defined game stages
-        me.state.set(me.state.MENU, new TitleScreen())
         me.state.set(me.state.PLAY, new PlayScreen())
 
-        // first layer is the background
+        // connect the `name` property of certain .tmx / tiled
+        // map entities with melonjs entity types
         const BACKGROUND_LAYER_NAME = 'background'
         me.pool.register(BACKGROUND_LAYER_NAME, BackgroundEntity)
+        const DOORWAY_LAYER_NAME = 'doorway'
+        me.pool.register(DOORWAY_LAYER_NAME, DoorwayEntity)
 
         // Start the game.
         me.state.change(me.state.PLAY)
@@ -160,7 +176,7 @@ const bindKeyboardListeners = () => {
           myself.load((meData) => {
             addMyself(meData[NAME_KEY], meData[IMAGE_KEY], myselfId)
           })
-        } else {
+        } else if (!IS_STUDIO) {
           setupNameCollectorListeners()
         }
       })

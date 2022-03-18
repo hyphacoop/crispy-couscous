@@ -1,4 +1,4 @@
-import { input, game, Entity } from 'melonjs/dist/melonjs.module.js'
+import { Entity } from 'melonjs/dist/melonjs.module.js'
 
 class BackgroundEntity extends Entity {
   /**

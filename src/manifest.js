@@ -7,6 +7,11 @@ const DataManifest = [
     src: 'data/img/map/building.png',
   },
   {
+    name: 'room',
+    type: 'image',
+    src: 'data/img/map/room.png',
+  },
+  {
     name: 'avatar-01',
     type: 'image',
     src: 'data/img/sprite/avatar-01.png',
@@ -67,6 +72,7 @@ const DataManifest = [
     src: 'data/img/sprite/avatar-12.png',
   },
   { name: 'area01', type: 'tmx', src: 'data/map/area01.tmx' },
+  { name: 'area02', type: 'tmx', src: 'data/map/area02.tmx' },
 ]
 
 export default DataManifest
