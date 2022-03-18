@@ -1,5 +1,6 @@
 import Gun from 'gun/gun'
 import 'gun/lib/load.js'
+import IS_STUDIO from './isStudio'
 import { removePlayer } from './js/createOrUpdateOtherPlayer'
 
 // const RELAY_ADDRESS = 'http://localhost:8080/gun'
@@ -65,6 +66,7 @@ function subscribeToArtistas(callback) {
         artistas.get(id).load((values) => {
           if (
             !values ||
+            values[IN_STUDIO_KEY] !== IS_STUDIO ||
             !values[LOCATION_KEY] ||
             typeof values[LOCATION_KEY].y !== 'number' ||
             typeof values[LOCATION_KEY].x !== 'number'
