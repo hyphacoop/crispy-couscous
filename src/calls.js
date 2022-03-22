@@ -1,13 +1,15 @@
-import { game } from 'melonjs/dist/melonjs.module'
-import getMainPlayer from './getMainPlayer'
-import { otherPlayerName } from './js/renderables/otherplayer'
+import getMainPlayer, { getOtherPlayer } from './getPlayer'
 
 const MIN_AUDIBLE_DISTANCE = 2000
 
 const calls = {}
 
-function createRecordOfOpenCall(id, audioEl) {
-  calls[id] = audioEl
+function createRecordOfOpenCall(id, mediaEl) {
+  calls[id] = mediaEl
+}
+
+function deleteRecordOfOpenCall(id) {
+  delete calls[id]
 }
 
 function checkForOpenCall(id) {
@@ -18,24 +20,14 @@ function allCallIds() {
   return Object.keys(calls)
 }
 
-function createAudioForCall(id, remoteStream) {
-  console.log('receiving an audio stream from', id)
-  const audio = document.createElement('audio')
-  audio.srcObject = remoteStream
-  audio.autoplay = true
-  audio.style.display = 'hidden'
-  document.body.appendChild(audio)
-  createRecordOfOpenCall(id, audio)
-}
-
 function adjustVolumeForDistance(id, distance) {
-  const audioEl = calls[id]
+  const mediaEl = calls[id]
   const volume =
     (MIN_AUDIBLE_DISTANCE - Math.min(distance, MIN_AUDIBLE_DISTANCE)) /
     MIN_AUDIBLE_DISTANCE
   // console.log('distance is ', distance)
   // console.log('adjusting volume to ', volume)
-  audioEl.volume = volume
+  mediaEl.volume = volume
 }
 
 // called when a remote players position changes
@@ -44,7 +36,7 @@ function adjustVolumeForOne(id) {
   // get main player
   const mainPlayer = getMainPlayer()
   // get the other player
-  const otherPlayer = game.world.getChildByName(otherPlayerName(id))[0]
+  const otherPlayer = getOtherPlayer(id)
   if (mainPlayer && otherPlayer) {
     // calculate the distance between them
     const mainPos = mainPlayer.pos
@@ -62,7 +54,8 @@ function adjustVolumeForAll() {
 }
 
 export {
-  createAudioForCall,
+  createRecordOfOpenCall,
+  deleteRecordOfOpenCall,
   checkForOpenCall,
   adjustVolumeForAll,
   adjustVolumeForOne,

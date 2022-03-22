@@ -58,7 +58,7 @@ body {
 #welcome label {
   font-size: 32px;
   line-height: 39px;
-  font-weight: bold;  
+  font-weight: bold;
 }
 #welcome input {
   margin: 20px 0 0 0;
@@ -92,4 +92,12 @@ body {
   padding: 4px 6px;
   border-radius: 3px;
   color: #333;
+}
+
+.player-media {
+  overflow: hidden;
+}
+
+.player-media video {
+  height: 100%;
 }

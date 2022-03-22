@@ -1,17 +1,13 @@
 import Peer from 'peerjs'
-import { input, game, Entity } from 'melonjs/dist/melonjs.module.js'
+import { input, game } from 'melonjs/dist/melonjs.module.js'
 import throttle from 'lodash.throttle'
+import PlayerWithLabelAndMediaEntity from './playerWithLabelAndMedia'
 import { myself, LOCATION_KEY, LAST_SEEN_KEY } from '../../gun2'
-import { SELF_REPRESENTATION_SIZE } from '../../selfRepresentation'
-import localToGlobal from '../../coord'
-import {
-  adjustVolumeForAll,
-  checkForOpenCall,
-  createAudioForCall,
-} from '../../calls'
+import { adjustVolumeForAll, checkForOpenCall } from '../../calls'
 import { getStream } from '../../myStream'
-import { OTHER_PLAYER_NAME } from './otherplayer'
 import IS_STUDIO from '../../isStudio'
+import { globalToWorld } from '../../coord'
+import { getOtherPlayer, OTHER_PLAYER_NAME } from '../../getPlayer'
 
 // a number that limits the write speed of
 // location updates to something reasonable
@@ -33,22 +29,14 @@ const updateMyLocation = throttle((x, y) => {
 //   }
 // })
 
-class PlayerEntity extends Entity {
+class PlayerEntity extends PlayerWithLabelAndMediaEntity {
   /**
    * constructor
    */
   constructor(x, y, settings) {
-    // call the parent constructor
-    super(x, y, {
-      ...settings,
-      width: SELF_REPRESENTATION_SIZE,
-      height: SELF_REPRESENTATION_SIZE,
-      framewidth: SELF_REPRESENTATION_SIZE,
-      frameheight: SELF_REPRESENTATION_SIZE,
-    })
+    super(x, y, settings)
 
     this.id = settings.id
-    this.artistaName = settings.artistaName
 
     // audio
     this.peer = new Peer(this.id)
@@ -69,29 +57,28 @@ class PlayerEntity extends Entity {
         call.answer(stream)
         call.on('stream', function (remoteStream) {
           const id = call.peer
-          createAudioForCall(id, remoteStream)
+          // find player and call the function to add a
+          // stream to their otherplayer
+
+          // double check now
+          if (!checkForOpenCall(id)) {
+            const otherPlayer = getOtherPlayer(id)
+            otherPlayer.addMedia(remoteStream, id)
+          }
         })
       } else {
         console.log('there was already an open call with', call.peer)
       }
     })
 
+    // set up my own feed
+    const stream = getStream()
+    this.addMedia(stream)
+
     // used to store a temp reference
     // if the user is currently switching from
     // one room context to another
     this.isLeaving = false
-
-    // label
-    this.myNameText = document.createElement('div')
-    this.myNameText.innerHTML = this.artistaName
-    this.myNameText.classList.add('name-label')
-    this.myNameText.style.position = `absolute`
-    // x and y are 'world' coordinates
-    this.updateLabelPosition(x, y)
-    document.body.appendChild(this.myNameText)
-
-    // draw image from the top left
-    this.anchorPoint.set(0.5, 0.5)
 
     // max walking & jumping speed
     const X_MAX_VELOCITY = 10
@@ -99,14 +86,8 @@ class PlayerEntity extends Entity {
     this.body.setMaxVelocity(X_MAX_VELOCITY, Y_MAX_VELOCITY)
     this.body.setFriction(0.8, 0.8)
 
-    // don't let gravity affect the object
-    this.body.ignoreGravity = true
-
     // set the display to follow our position on both axis
     game.viewport.follow(this.pos, game.viewport.AXIS.BOTH, 0.4)
-
-    // ensure the player is updated even when outside of the viewport
-    this.alwaysUpdate = true
 
     // this is a field that
     // can be set by myself or by others
@@ -116,6 +97,7 @@ class PlayerEntity extends Entity {
     this.destination = null
   }
 
+  // event hooks
   onActivateEvent() {
     // register on the 'pointerdown' event, which is like a mouse click
     input.registerPointerEvent(
@@ -124,21 +106,14 @@ class PlayerEntity extends Entity {
       this.pointerDown.bind(this)
     )
   }
-
   onDeactivateEvent() {
     input.releaseAllPointerEvents(this)
   }
 
+  // custom fn
   pointerDown(pointer) {
     // point-and-click navigation
-    const viewportRelative = input.globalToLocal(
-      pointer.clientX,
-      pointer.clientY
-    )
-    const worldRelative = game.viewport.localToWorld(
-      viewportRelative.x,
-      viewportRelative.y
-    )
+    const worldRelative = globalToWorld(pointer.clientX, pointer.clientY)
     // use this position as the final position to navigate to
     // adjust by self-representation size
     this.destination = {
@@ -213,22 +188,6 @@ class PlayerEntity extends Entity {
     return super.update(dt) || this.body.vel.x !== 0 || this.body.vel.y !== 0
   }
 
-  updateLabelPosition(worldX, worldY) {
-    const VERTICAL_PADDING = 10
-    const localCoord = game.viewport.worldToLocal(
-      worldX + SELF_REPRESENTATION_SIZE / 2,
-      worldY + SELF_REPRESENTATION_SIZE + VERTICAL_PADDING
-    )
-    const globalCoord = localToGlobal(localCoord.x, localCoord.y)
-    this.myNameText.style.top = `${globalCoord.y}px`
-    this.myNameText.style.left = `${globalCoord.x}px`
-  }
-
-  onDestroyEvent() {
-    // remove the label from the DOM
-    this.myNameText.remove()
-  }
-
   /**
    * colision handler
    * (called when colliding with other objects)
@@ -245,9 +204,14 @@ class PlayerEntity extends Entity {
       if (!this.isLeaving) {
         this.isLeaving = true
         if (IS_STUDIO) {
-          window.location.href = window.location.href.replace('/studio.html', '?from-studio=true')
+          window.location.href = window.location.href.replace(
+            '/studio.html',
+            '?from-studio=true'
+          )
         } else {
-          window.location.href = window.location.href.replace('?from-studio=true', '') + 'studio.html'
+          window.location.href =
+            window.location.href.replace('?from-studio=true', '') +
+            'studio.html'
         }
       }
       return false

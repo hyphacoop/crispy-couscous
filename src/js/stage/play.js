@@ -1,4 +1,5 @@
 import { Stage, game, level } from 'melonjs/dist/melonjs.module.js'
+import getMainPlayer from '../../getPlayer'
 
 import IS_STUDIO from '../../isStudio'
 
@@ -16,8 +17,8 @@ class PlayScreen extends Stage {
       setViewportBounds: true,
     })
 
-    const p = game.world.getChildByName('mainPlayer')[0]
-    game.world.moveToTop(p)
+    const mainPlayer = getMainPlayer()
+    game.world.moveToTop(mainPlayer)
   }
 
   // onDestroyEvent() {

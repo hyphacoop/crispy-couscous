@@ -1,4 +1,4 @@
-import { pool, video, device } from 'melonjs/dist/melonjs.module'
+import { input, game, pool, video, device } from 'melonjs/dist/melonjs.module'
 
 export default function localToGlobal(x, y) {
   let v = pool.pull('Vector2d')
@@ -18,4 +18,18 @@ export default function localToGlobal(x, y) {
   x += rect.left + (window.pageXOffset || 0)
   y += rect.top + (window.pageYOffset || 0)
   return v.set(x, y)
+}
+
+// from the world coords, through the 'local' coords
+// and finally, to the coords on 'screen'
+export function worldToGlobal(x, y) {
+  const localCoord = game.viewport.worldToLocal(x, y)
+  return localToGlobal(localCoord.x, localCoord.y)
+}
+
+// from the "global" coords (on screen), through the 'local' (viewport)
+// coords, and finally, to the "world" coords
+export function globalToWorld(x, y) {
+  const localCoord = input.globalToLocal(x, y)
+  return game.viewport.localToWorld(localCoord.x, localCoord.y)
 }

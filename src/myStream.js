@@ -20,7 +20,7 @@ export function getUserMedia() {
       navigator.webkitGetUserMedia ||
       navigator.mozGetUserMedia
     internalGetUserMedia(
-      { video: false, audio: true },
+      { video: true, audio: true },
       (stream) => {
         resolve(stream)
       },

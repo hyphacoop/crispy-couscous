@@ -19,7 +19,7 @@ import {
 } from './gun2'
 import pickRandomImage from './selfRepresentation'
 import createOrUpdateOtherPlayer from './js/createOrUpdateOtherPlayer'
-import { MAIN_PLAYER_NAME } from './getMainPlayer'
+import { MAIN_PLAYER_NAME } from './getPlayer'
 import { getUserMedia, setStream } from './myStream'
 import IS_STUDIO from './isStudio'
 import DoorwayEntity from './js/renderables/doorway'

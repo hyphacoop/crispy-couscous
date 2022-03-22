@@ -2,9 +2,9 @@ import { game } from 'melonjs/dist/melonjs.module.js'
 import {
   adjustVolumeForOne,
   checkForOpenCall,
-  createAudioForCall,
+  deleteRecordOfOpenCall,
 } from '../calls'
-import getMainPlayer from '../getMainPlayer'
+import getMainPlayer, { getOtherPlayer, otherPlayerName } from '../getPlayer'
 import {
   IMAGE_KEY,
   IN_STUDIO_KEY,
@@ -15,7 +15,7 @@ import {
 import IS_STUDIO from '../isStudio'
 import { getStream } from '../myStream'
 import { SELF_REPRESENTATION_SIZE } from '../selfRepresentation'
-import OtherPlayer, { otherPlayerName } from './renderables/otherplayer'
+import OtherPlayer from './renderables/otherplayer'
 
 const artistasPlayers = {}
 
@@ -76,7 +76,13 @@ function createOrUpdateOtherPlayer(id, details) {
           // when the other player "picks up"
           call.on('stream', (remoteStream) => {
             console.log('received an answer from ', id)
-            createAudioForCall(id, remoteStream)
+            // find player and call the function to add a
+            // stream to their otherplayer
+            // double check now
+            if (!checkForOpenCall(id)) {
+              const otherPlayer = getOtherPlayer(id)
+              otherPlayer.addMedia(remoteStream, id)
+            }
           })
         } else {
           console.log('why is there no call?')
@@ -91,12 +97,12 @@ function createOrUpdateOtherPlayer(id, details) {
 }
 
 function removePlayer(id) {
-  const player = game.world.getChildByName(`other-player-${id}`)[0]
+  const player = getOtherPlayer(id)
   if (player) {
     game.world.removeChild(player)
   }
   delete artistasPlayers[id]
-  //TODO: remove their audio here as well
+  deleteRecordOfOpenCall(id)
 }
 
 export { removePlayer }
