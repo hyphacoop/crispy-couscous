@@ -1,4 +1,4 @@
-import { game, Entity } from 'melonjs/dist/melonjs.module.js'
+import { input, Entity } from 'melonjs/dist/melonjs.module.js'
 import { SELF_REPRESENTATION_SIZE } from '../../selfRepresentation'
 import { worldToGlobal } from '../../coord'
 import { createRecordOfOpenCall } from '../../calls'
@@ -20,6 +20,7 @@ class PlayerWithLabelAndMediaEntity extends Entity {
     // draw from the center
     this.anchorPoint.set(0.5, 0.5)
 
+    this.playerId = settings.playerId
     this.artistaName = settings.artistaName
 
     // label
@@ -36,6 +37,21 @@ class PlayerWithLabelAndMediaEntity extends Entity {
 
     // ensure the player is updated even when outside of the viewport
     this.alwaysUpdate = true
+  }
+
+  onActivateEvent() {
+    input.registerPointerEvent("pointerdown", this, this.onClick.bind(this))
+  }
+  
+  onDeactivateEvent() {
+    console.log('called onDeactivateEvent')
+    input.releasePointerEvent("pointerdown", this);
+  }
+
+  // @private
+  onClick() {
+    // select this player, so that we can then move them
+    this.isSelected = !this.isSelected
   }
 
   /**
@@ -60,10 +76,15 @@ class PlayerWithLabelAndMediaEntity extends Entity {
   // remoteId is optional, and should be passed if this is from remote
   // not local
   addMedia(mediaStream, remoteId) {
-    this.media = document.createElement('video')
+    this.mediaIsVideo = mediaStream.getVideoTracks().length > 0
+    if (this.mediaIsVideo) {
+      this.media = document.createElement('video')
+    } else {
+      this.media = document.createElement('audio')
+    }
     this.media.srcObject = mediaStream
     this.media.autoplay = true
-    
+
     if (remoteId) {
       console.log('receiving a media stream from', remoteId)
       // cache this media object, for doing volume
@@ -71,15 +92,19 @@ class PlayerWithLabelAndMediaEntity extends Entity {
       // get duplicated again for the same peer
       createRecordOfOpenCall(remoteId, this.media)
     } else {
-      // mute myself
+      // mute local feed, for local
       this.media.volume = 0
     }
 
-    // this.media.style.display = 'hidden'
-
     this.mediaContainer = document.createElement('div')
-    this.mediaContainer.style.position = `absolute`
     this.mediaContainer.classList.add('player-media')
+    // don't display an audio feed on screen
+    if (!this.mediaIsVideo) {
+      this.media.style.display = 'hidden'
+    } else {
+      // if video, listen for clicks
+      this.mediaContainer.addEventListener('click', this.onClick.bind(this))
+    }
     this.mediaContainer.appendChild(this.media)
     document.body.appendChild(this.mediaContainer)
     // x and y are 'world' coordinates
@@ -100,6 +125,14 @@ class PlayerWithLabelAndMediaEntity extends Entity {
 
     this.mediaContainer.style.left = `${globalCoordTopLeft.x}px`
     this.mediaContainer.style.top = `${globalCoordTopLeft.y}px`
+  }
+
+  draw(renderer, object) {
+    // console.log(object)
+    // dont render image if we have video
+    if (!this.mediaIsVideo) {
+      super.draw(renderer, object)
+    }
   }
 
   onDestroyEvent() {

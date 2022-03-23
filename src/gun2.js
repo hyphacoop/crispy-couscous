@@ -16,6 +16,7 @@ const ARTISTAS_KEY = 'artistas'
 // property of player keys
 const IN_STUDIO_KEY = 'instudio' // boolean
 const LOCATION_KEY = 'location' // { x: number, y: number } | null
+const DESTINATION_KEY = 'destination' // { x: number, y: number } | null
 const LAST_SEEN_KEY = 'lastseen' // a unix timestamp
 const NAME_KEY = 'artistaName' // string
 const IMAGE_KEY = 'artistaImage' // string
@@ -98,6 +99,7 @@ export {
   ARTISTAS_KEY,
   IN_STUDIO_KEY,
   LOCATION_KEY,
+  DESTINATION_KEY,
   LAST_SEEN_KEY,
   NAME_KEY,
   IMAGE_KEY,

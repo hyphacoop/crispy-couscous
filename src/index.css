@@ -24,6 +24,7 @@ body {
 }
 
 #overlay {
+  display: none;
   position: absolute;
   top: 0;
   left: 0;
@@ -95,7 +96,10 @@ body {
 }
 
 .player-media {
+  position: absolute;
   overflow: hidden;
+  display: flex;
+  justify-content: center;
 }
 
 .player-media video {

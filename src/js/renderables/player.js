@@ -2,7 +2,13 @@ import Peer from 'peerjs'
 import { input, game } from 'melonjs/dist/melonjs.module.js'
 import throttle from 'lodash.throttle'
 import PlayerWithLabelAndMediaEntity from './playerWithLabelAndMedia'
-import { myself, LOCATION_KEY, LAST_SEEN_KEY } from '../../gun2'
+import {
+  myself,
+  LOCATION_KEY,
+  LAST_SEEN_KEY,
+  artistas,
+  DESTINATION_KEY,
+} from '../../gun2'
 import { adjustVolumeForAll, checkForOpenCall } from '../../calls'
 import { getStream } from '../../myStream'
 import IS_STUDIO from '../../isStudio'
@@ -36,10 +42,12 @@ class PlayerEntity extends PlayerWithLabelAndMediaEntity {
   constructor(x, y, settings) {
     super(x, y, settings)
 
-    this.id = settings.id
+    this.playerId = settings.playerId
 
     // audio
-    this.peer = new Peer(this.id)
+    this.peer = new Peer(this.playerId, {
+      debug: 1, // errors
+    })
     var that = this
 
     // when I get a "call" automatically "pick up"
@@ -99,6 +107,7 @@ class PlayerEntity extends PlayerWithLabelAndMediaEntity {
 
   // event hooks
   onActivateEvent() {
+    super.onActivateEvent()
     // register on the 'pointerdown' event, which is like a mouse click
     input.registerPointerEvent(
       'pointerdown',
@@ -107,18 +116,31 @@ class PlayerEntity extends PlayerWithLabelAndMediaEntity {
     )
   }
   onDeactivateEvent() {
+    super.onDeactivateEvent()
     input.releaseAllPointerEvents(this)
   }
 
-  // custom fn
+  // TODO: this should move out to some more global scope
   pointerDown(pointer) {
     // point-and-click navigation
     const worldRelative = globalToWorld(pointer.clientX, pointer.clientY)
-    // use this position as the final position to navigate to
-    // adjust by self-representation size
-    this.destination = {
+    const destination = {
       x: worldRelative.x - this.width / 2,
       y: worldRelative.y - this.height / 2,
+    }
+    const hasOtherPlayerSelected = game.world.getChildren().find((r) => {
+      return r.isSelected
+    })
+    if (hasOtherPlayerSelected) {
+      console.log('setting other players destination', destination)
+      artistas
+        .get(hasOtherPlayerSelected.playerId)
+        .put({ [DESTINATION_KEY]: destination })
+    } else {
+      // use this position as the final position to navigate the local players
+      // position to
+      // (and adjust by self-representation size)
+      this.destination = destination
     }
   }
 

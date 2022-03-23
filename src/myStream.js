@@ -3,24 +3,43 @@
   stream, after it's been approved by the user.
 */
 
-let stream
+let videoStream
+let audioStream
 
-export function setStream(s) {
-  stream = s
+export function setAudioStream(s) {
+  audioStream = s
+}
+
+export function getAudioStream() {
+  return audioStream
+}
+
+export function setVideoStream(s) {
+  videoStream = s
+}
+
+export function getVideoStream() {
+  return videoStream
 }
 
 export function getStream() {
-  return stream
+  if (videoStream && audioStream) {
+    return new MediaStream([...videoStream.getVideoTracks(), ...audioStream.getAudioTracks()])
+  } else if (videoStream) {
+    return videoStream
+  } else if (audioStream) {
+    return audioStream
+  }
 }
 
-export function getUserMedia() {
+export function getUserMedia(opts) {
   return new Promise((resolve, reject) => {
     var internalGetUserMedia =
       navigator.getUserMedia ||
       navigator.webkitGetUserMedia ||
       navigator.mozGetUserMedia
     internalGetUserMedia(
-      { video: true, audio: true },
+      opts, // { video: boolean, audio: boolean }
       (stream) => {
         resolve(stream)
       },

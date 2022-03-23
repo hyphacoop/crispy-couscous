@@ -16,11 +16,12 @@ import {
   IS_NEW_HERE,
   subscribeToArtistas,
   IN_STUDIO_KEY,
+  DESTINATION_KEY,
 } from './gun2'
 import pickRandomImage from './selfRepresentation'
 import createOrUpdateOtherPlayer from './js/createOrUpdateOtherPlayer'
-import { MAIN_PLAYER_NAME } from './getPlayer'
-import { getUserMedia, setStream } from './myStream'
+import getMainPlayer, { MAIN_PLAYER_NAME } from './getPlayer'
+import { getUserMedia, setVideoStream, setAudioStream } from './myStream'
 import IS_STUDIO from './isStudio'
 import DoorwayEntity from './js/renderables/doorway'
 
@@ -63,6 +64,7 @@ const BUTTON_ID = 'enter-space-button'
 const overlay = document.getElementById(OVERLAY_ID)
 
 const setupNameCollectorListeners = () => {
+  overlay.style.display = 'flex'
   const nameInput = document.getElementById(INPUT_ID)
   const nameButton = document.getElementById(BUTTON_ID)
   const onChange = () => {
@@ -92,9 +94,9 @@ const addMyself = (name, image, id) => {
   // create my player
   const mainPlayer = new PlayerEntity(SPAWN_X, SPAWN_Y, {
     name: MAIN_PLAYER_NAME,
+    playerId: id,
     artistaName: name,
     image: image,
-    id: id,
   })
   me.game.world.addChild(mainPlayer, 4)
 
@@ -111,6 +113,11 @@ const addMyself = (name, image, id) => {
 
   // now that I'm 'alive' listen for other people
   subscribeToArtistas(createOrUpdateOtherPlayer)
+
+  myself.get(DESTINATION_KEY).on((v) => {
+    const mainPlayer = getMainPlayer()
+    mainPlayer.destination = v
+  })
 }
 
 const bindKeyboardListeners = () => {
@@ -122,70 +129,76 @@ const bindKeyboardListeners = () => {
 }
 
 ;(async () => {
+  let audioStream, videoStream
   try {
-    const stream = await getUserMedia()
-    setStream(stream)
-    me.device.onReady(() => {
-      // initialize the display canvas once the device/browser is ready
-      if (
-        !me.video.init(FOV_WIDTH, FOV_HEIGHT, {
-          parent: HTML_DIV_ID,
-          scale: 'auto',
-          // scaleMethod: 'flex-width',
-        })
-      ) {
-        alert('Your browser does not support HTML5 canvas.')
-        return
-      }
+    audioStream = await getUserMedia({ video: false, audio: true })
+    setAudioStream(audioStream)
+  } catch (e) {}
+  try {
+    videoStream = await getUserMedia({ video: true, audio: false })
+    setVideoStream(videoStream)
+  } catch (e) {}
 
-      // initialize the debug plugin in development mode.
-      if (process.env.NODE_ENV === 'development') {
-        import('js/plugin/debug/debugPanel.js').then((plugin) => {
-          // automatically register the debug panel
-          me.utils.function.defer(
-            me.plugin.register,
-            this,
-            plugin.DebugPanelPlugin,
-            'debugPanel'
-          )
-        })
-      }
-
-      // Initialize the audio.
-      me.audio.init('mp3,ogg')
-
-      // allow cross-origin for image/texture loading
-      me.loader.crossOrigin = 'anonymous'
-
-      // set and load all resources.
-      me.loader.preload(DataManifest, function () {
-        // set the user defined game stages
-        me.state.set(me.state.PLAY, new PlayScreen())
-
-        // connect the `name` property of certain .tmx / tiled
-        // map entities with melonjs entity types
-        const BACKGROUND_LAYER_NAME = 'background'
-        me.pool.register(BACKGROUND_LAYER_NAME, BackgroundEntity)
-        const DOORWAY_LAYER_NAME = 'doorway'
-        me.pool.register(DOORWAY_LAYER_NAME, DoorwayEntity)
-
-        // Start the game.
-        me.state.change(me.state.PLAY)
-
-        if (!IS_NEW_HERE) {
-          myself.load((meData) => {
-            addMyself(meData[NAME_KEY], meData[IMAGE_KEY], myselfId)
-          })
-        } else if (!IS_STUDIO) {
-          setupNameCollectorListeners()
-        }
-      })
-    })
-  } catch (e) {
-    // there was a fundamental error
-    console.error(e)
+  if (!(audioStream || videoStream)) {
     alert(
-      'Unable to enter the space, because there is no access to audio/video'
+      'Unable to enter the space, because there is no access to audio or video'
     )
   }
+
+  me.device.onReady(() => {
+    // initialize the display canvas once the device/browser is ready
+    if (
+      !me.video.init(FOV_WIDTH, FOV_HEIGHT, {
+        parent: HTML_DIV_ID,
+        scale: 'auto',
+        scaleMethod: 'flex-width',
+      })
+    ) {
+      alert('Your browser does not support HTML5 canvas.')
+      return
+    }
+
+    // initialize the debug plugin in development mode.
+    if (process.env.NODE_ENV === 'development') {
+      import('js/plugin/debug/debugPanel.js').then((plugin) => {
+        // automatically register the debug panel
+        me.utils.function.defer(
+          me.plugin.register,
+          this,
+          plugin.DebugPanelPlugin,
+          'debugPanel'
+        )
+      })
+    }
+
+    // Initialize the audio.
+    me.audio.init('mp3,ogg')
+
+    // allow cross-origin for image/texture loading
+    me.loader.crossOrigin = 'anonymous'
+
+    // set and load all resources.
+    me.loader.preload(DataManifest, function () {
+      // set the user defined game stages
+      me.state.set(me.state.PLAY, new PlayScreen())
+
+      // connect the `name` property of certain .tmx / tiled
+      // map entities with melonjs entity types
+      const BACKGROUND_LAYER_NAME = 'background'
+      me.pool.register(BACKGROUND_LAYER_NAME, BackgroundEntity)
+      const DOORWAY_LAYER_NAME = 'doorway'
+      me.pool.register(DOORWAY_LAYER_NAME, DoorwayEntity)
+
+      // Start the game.
+      me.state.change(me.state.PLAY)
+
+      if (!IS_NEW_HERE) {
+        myself.load((meData) => {
+          addMyself(meData[NAME_KEY], meData[IMAGE_KEY], myselfId)
+        })
+      } else if (!IS_STUDIO) {
+        setupNameCollectorListeners()
+      }
+    })
+  })
 })()

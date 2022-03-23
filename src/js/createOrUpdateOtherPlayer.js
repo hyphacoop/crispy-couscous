@@ -50,6 +50,7 @@ function createOrUpdateOtherPlayer(id, details) {
       details[LOCATION_KEY].y,
       {
         name: otherPlayerName(id),
+        playerId: id,
         artistaName: details[NAME_KEY],
         image: details[IMAGE_KEY],
         width: SELF_REPRESENTATION_SIZE,
