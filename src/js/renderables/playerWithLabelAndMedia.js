@@ -29,7 +29,7 @@ class PlayerWithLabelAndMediaEntity extends Entity {
     this.myNameText.innerHTML = this.artistaName
     this.myNameText.classList.add('name-label')
     this.myNameText.style.position = `absolute`
-    this.myNameText.addEventListener('click', this.onClick.bind(this))
+    // this.myNameText.addEventListener('click', this.onClick.bind(this))
     // x and y are 'world' coordinates
     this.updateLabelPosition(x, y)
     document.body.appendChild(this.myNameText)
@@ -50,16 +50,16 @@ class PlayerWithLabelAndMediaEntity extends Entity {
   }
 
   // @private
-  onClick() {
-    // we can't select ourselves
-    if (this.name === MAIN_PLAYER_NAME) return
-    // alternate the selection
-    if (this.isSelected) {
-      this.deselect()
-    } else {
-      this.select()
-    }
-  }
+  // onClick() {
+  //   // we can't select ourselves
+  //   if (this.name === MAIN_PLAYER_NAME) return
+  //   // alternate the selection
+  //   if (this.isSelected) {
+  //     this.deselect()
+  //   } else {
+  //     this.select()
+  //   }
+  // }
 
   /**
    * update the entity
@@ -110,7 +110,7 @@ class PlayerWithLabelAndMediaEntity extends Entity {
       this.media.style.display = 'hidden'
     } else {
       // if video, listen for clicks
-      this.mediaContainer.addEventListener('click', this.onClick.bind(this))
+      // this.mediaContainer.addEventListener('click', this.onClick.bind(this))
     }
     this.mediaContainer.appendChild(this.media)
     document.body.appendChild(this.mediaContainer)

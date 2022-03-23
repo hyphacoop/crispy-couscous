@@ -115,12 +115,15 @@ const addMyself = (name, image, id) => {
   // now that I'm 'alive' listen for other people
   subscribeToArtistas(createOrUpdateOtherPlayer)
 
-  myself.get(DESTINATION_KEY).on((v) => {
-    if (v) {
-      console.log('received a new destination')
-      mainPlayer.destination = v
-    }
-  })
+  // myself.get(DESTINATION_KEY).on((v) => {
+  //   if (v) {
+  //     console.log('received a new destination', v)
+  //     const mainPlayer = getMainPlayer()
+  //     mainPlayer.destination = v
+  //     mainPlayer.isDirty = true
+  //     console.log(mainPlayer)
+  //   }
+  // })
 }
 
 const bindKeyboardListeners = () => {
