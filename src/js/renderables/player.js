@@ -132,7 +132,6 @@ class PlayerEntity extends PlayerWithLabelAndMediaEntity {
       return r.isSelected
     })
     if (hasOtherPlayerSelected) {
-      console.log('setting other players destination', destination)
       artistas
         .get(hasOtherPlayerSelected.playerId)
         .put({ [DESTINATION_KEY]: destination })
@@ -157,7 +156,7 @@ class PlayerEntity extends PlayerWithLabelAndMediaEntity {
     ) {
       // if a keyboard arrow key has
       // been pressed, clear the destination
-      this.destination = null
+      this.resetDestination()
       if (input.isKeyPressed('left')) {
         this.body.force.x = -this.body.maxVel.x
       } else if (input.isKeyPressed('right')) {
@@ -195,7 +194,7 @@ class PlayerEntity extends PlayerWithLabelAndMediaEntity {
         }
       }
     } else {
-      this.destination = null
+      this.resetDestination()
       this.body.force.x = 0
       this.body.force.y = 0
     }
@@ -208,6 +207,11 @@ class PlayerEntity extends PlayerWithLabelAndMediaEntity {
 
     // call the parent method
     return super.update(dt) || this.body.vel.x !== 0 || this.body.vel.y !== 0
+  }
+
+  resetDestination() {
+    this.destination = null
+    myself.put({ [DESTINATION_KEY]: null })
   }
 
   /**

@@ -2,6 +2,7 @@ import { input, Entity } from 'melonjs/dist/melonjs.module.js'
 import { SELF_REPRESENTATION_SIZE } from '../../selfRepresentation'
 import { worldToGlobal } from '../../coord'
 import { createRecordOfOpenCall } from '../../calls'
+import { MAIN_PLAYER_NAME } from '../../getPlayer'
 
 class PlayerWithLabelAndMediaEntity extends Entity {
   /**
@@ -28,6 +29,7 @@ class PlayerWithLabelAndMediaEntity extends Entity {
     this.myNameText.innerHTML = this.artistaName
     this.myNameText.classList.add('name-label')
     this.myNameText.style.position = `absolute`
+    this.myNameText.addEventListener('click', this.onClick.bind(this))
     // x and y are 'world' coordinates
     this.updateLabelPosition(x, y)
     document.body.appendChild(this.myNameText)
@@ -40,18 +42,23 @@ class PlayerWithLabelAndMediaEntity extends Entity {
   }
 
   onActivateEvent() {
-    input.registerPointerEvent("pointerdown", this, this.onClick.bind(this))
+    // input.registerPointerEvent('pointerdown', this, this.onClick.bind(this))
   }
-  
+
   onDeactivateEvent() {
-    console.log('called onDeactivateEvent')
-    input.releasePointerEvent("pointerdown", this);
+    // input.releasePointerEvent('pointerdown', this)
   }
 
   // @private
   onClick() {
-    // select this player, so that we can then move them
-    this.isSelected = !this.isSelected
+    // we can't select ourselves
+    if (this.name === MAIN_PLAYER_NAME) return
+    // alternate the selection
+    if (this.isSelected) {
+      this.deselect()
+    } else {
+      this.select()
+    }
   }
 
   /**
@@ -125,6 +132,18 @@ class PlayerWithLabelAndMediaEntity extends Entity {
 
     this.mediaContainer.style.left = `${globalCoordTopLeft.x}px`
     this.mediaContainer.style.top = `${globalCoordTopLeft.y}px`
+  }
+
+  select() {
+    this.myNameText.innerHTML = this.myNameText.innerHTML + ' (selected)'
+    this.isSelected = true
+  }
+  deselect() {
+    this.myNameText.innerHTML = this.myNameText.innerHTML.replace(
+      ' (selected)',
+      ''
+    )
+    this.isSelected = false
   }
 
   draw(renderer, object) {

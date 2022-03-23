@@ -105,6 +105,7 @@ const addMyself = (name, image, id) => {
     [IN_STUDIO_KEY]: IS_STUDIO,
     [IMAGE_KEY]: image,
     [NAME_KEY]: name,
+    [DESTINATION_KEY]: null,
     [LOCATION_KEY]: {
       x: SPAWN_X,
       y: SPAWN_Y,
@@ -115,7 +116,6 @@ const addMyself = (name, image, id) => {
   subscribeToArtistas(createOrUpdateOtherPlayer)
 
   myself.get(DESTINATION_KEY).on((v) => {
-    const mainPlayer = getMainPlayer()
     mainPlayer.destination = v
   })
 }
