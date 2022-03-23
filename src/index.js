@@ -116,7 +116,10 @@ const addMyself = (name, image, id) => {
   subscribeToArtistas(createOrUpdateOtherPlayer)
 
   myself.get(DESTINATION_KEY).on((v) => {
-    mainPlayer.destination = v
+    if (v) {
+      console.log('received a new destination')
+      mainPlayer.destination = v
+    }
   })
 }
 

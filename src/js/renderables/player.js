@@ -132,6 +132,7 @@ class PlayerEntity extends PlayerWithLabelAndMediaEntity {
       return r.isSelected
     })
     if (hasOtherPlayerSelected) {
+      console.log('setting new destination for player ', hasOtherPlayerSelected.playerId)
       artistas
         .get(hasOtherPlayerSelected.playerId)
         .put({ [DESTINATION_KEY]: destination })
