@@ -67,7 +67,12 @@ function createOrUpdateOtherPlayer(id, details) {
       // for me, in terms of zIndex
       game.world.moveToTop(mainPlayer)
 
-      if (!checkForOpenCall(id)) {
+      // here we make sure that only one of the two
+      // peers initiates a call with the other.
+      // the other will be the responder
+      const isInitiater = Number(mainPlayer.playerId) > Number(id)
+      console.log(Number(mainPlayer.playerId), Number(id))
+      if (isInitiater && !checkForOpenCall(id)) {
         console.log(
           `there is no open call. we should call peer ${id}, trying...`
         )
