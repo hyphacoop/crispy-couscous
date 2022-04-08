@@ -139,11 +139,15 @@ const bindKeyboardListeners = () => {
   try {
     audioStream = await getUserMedia({ video: false, audio: true })
     setAudioStream(audioStream)
-  } catch (e) {}
+  } catch (e) {
+    console.log(e)
+  }
   try {
     videoStream = await getUserMedia({ video: true, audio: false })
     setVideoStream(videoStream)
-  } catch (e) {}
+  } catch (e) {
+    console.log(e)
+  }
 
   if (!(audioStream || videoStream)) {
     alert(
@@ -156,6 +160,7 @@ const bindKeyboardListeners = () => {
     if (
       !me.video.init(FOV_WIDTH, FOV_HEIGHT, {
         parent: HTML_DIV_ID,
+        renderer: me.video.CANVAS,
         scale: 'auto',
         scaleMethod: 'flex-width',
       })

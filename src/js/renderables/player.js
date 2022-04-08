@@ -69,10 +69,17 @@ class PlayerEntity extends PlayerWithLabelAndMediaEntity {
           // stream to their otherplayer
 
           // double check now
-          if (!checkForOpenCall(id)) {
-            const otherPlayer = getOtherPlayer(id)
-            otherPlayer.addMedia(remoteStream, id)
+          function addMediaForPlayer() {
+            if (!checkForOpenCall(id)) {
+              const otherPlayer = getOtherPlayer(id)
+              if (otherPlayer) {
+                otherPlayer.addMedia(remoteStream, id)
+              } else {
+                setTimeout(addMediaForPlayer, 1000)
+              }
+            }
           }
+          addMediaForPlayer()
         })
       } else {
         console.log('there was already an open call with', call.peer)

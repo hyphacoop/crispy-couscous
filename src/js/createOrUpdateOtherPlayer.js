@@ -2,7 +2,9 @@ import { game } from 'melonjs/dist/melonjs.module.js'
 import {
   adjustVolumeForOne,
   checkForOpenCall,
+  checkForInitiatedCall,
   deleteRecordOfOpenCall,
+  createRecordOfInitiatedCall,
 } from '../calls'
 import getMainPlayer, { getOtherPlayer, otherPlayerName } from '../getPlayer'
 import {
@@ -71,16 +73,17 @@ function createOrUpdateOtherPlayer(id, details) {
       // peers initiates a call with the other.
       // the other will be the responder
       const isInitiater = Number(mainPlayer.playerId) > Number(id)
-      console.log(Number(mainPlayer.playerId), Number(id))
-      if (isInitiater && !checkForOpenCall(id)) {
+      if (isInitiater && !checkForInitiatedCall(id) && !checkForOpenCall(id)) {
         console.log(
           `there is no open call. we should call peer ${id}, trying...`
         )
         const stream = getStream()
         const call = mainPlayer.peer.call(id, stream)
+        createRecordOfInitiatedCall(id)
         if (call) {
           // when the other player "picks up"
           call.on('stream', (remoteStream) => {
+            console.log('remoteStream', remoteStream)
             console.log('received an answer from ', id)
             // find player and call the function to add a
             // stream to their otherplayer
@@ -93,11 +96,7 @@ function createOrUpdateOtherPlayer(id, details) {
         } else {
           console.log('why is there no call?')
         }
-      } else {
-        console.log('skipping, there is already an open call with peer ', id)
       }
-    } else {
-      console.log('we dont have mainPlayer, skipping...')
     }
   }
 }

@@ -1,7 +1,7 @@
 import { input, Entity } from 'melonjs/dist/melonjs.module.js'
 import { SELF_REPRESENTATION_SIZE } from '../../selfRepresentation'
 import { worldToGlobal } from '../../coord'
-import { createRecordOfOpenCall } from '../../calls'
+import { createRecordOfOpenCall, deleteRecordOfInitiatedCall } from '../../calls'
 import { MAIN_PLAYER_NAME } from '../../getPlayer'
 
 class PlayerWithLabelAndMediaEntity extends Entity {
@@ -97,6 +97,7 @@ class PlayerWithLabelAndMediaEntity extends Entity {
       // cache this media object, for doing volume
       // adjustments, and making sure that it doesn't
       // get duplicated again for the same peer
+      deleteRecordOfInitiatedCall(remoteId)
       createRecordOfOpenCall(remoteId, this.media)
     } else {
       // mute local feed, for local

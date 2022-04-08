@@ -2,6 +2,21 @@ import getMainPlayer, { getOtherPlayer } from './getPlayer'
 
 const MIN_AUDIBLE_DISTANCE = 2000
 
+// people we've initiated a call with, and are trying to reach
+const initiatedCalls = {}
+function createRecordOfInitiatedCall(id) {
+  initiatedCalls[id] = true
+}
+
+function deleteRecordOfInitiatedCall(id) {
+  delete initiatedCalls[id]
+}
+
+function checkForInitiatedCall(id) {
+ return initiatedCalls[id]
+}
+
+// actual calls
 const calls = {}
 
 function createRecordOfOpenCall(id, mediaEl) {
@@ -54,6 +69,11 @@ function adjustVolumeForAll() {
 }
 
 export {
+  // initiated calls
+  createRecordOfInitiatedCall,
+  deleteRecordOfInitiatedCall,
+  checkForInitiatedCall,
+  // open calls
   createRecordOfOpenCall,
   deleteRecordOfOpenCall,
   checkForOpenCall,
