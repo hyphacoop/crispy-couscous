@@ -1,4 +1,5 @@
 import * as me from 'melonjs/dist/melonjs.module.js'
+import { Vector2d } from 'melonjs/dist/melonjs.module'
 import 'index.css'
 
 import PlayScreen from 'js/stage/play.js'
@@ -20,7 +21,7 @@ import {
 } from './gun2'
 import pickRandomImage from './selfRepresentation'
 import createOrUpdateOtherPlayer from './js/createOrUpdateOtherPlayer'
-import getMainPlayer, { MAIN_PLAYER_NAME } from './getPlayer'
+import { MAIN_PLAYER_NAME } from './getPlayer'
 import { getUserMedia, setVideoStream, setAudioStream } from './myStream'
 import IS_STUDIO from './isStudio'
 import DoorwayEntity from './js/renderables/doorway'
@@ -50,6 +51,13 @@ if (IS_STUDIO) {
   SPAWN_X = 3852
   SPAWN_Y = 7723
 }
+
+// WORLD BOUNDARIES
+let BUILDING_BOUND_X = 7798
+let BUILDING_BOUND_Y = 8192
+
+
+
 
 // these numbers define roughly the field-of-view
 const FOV_WIDTH = IS_STUDIO ? 3000 : 2000
@@ -135,32 +143,12 @@ const bindKeyboardListeners = () => {
 }
 
 ;(async () => {
-  let audioStream, videoStream
-  try {
-    audioStream = await getUserMedia({ video: false, audio: true })
-    setAudioStream(audioStream)
-  } catch (e) {
-    console.log(e)
-  }
-  try {
-    videoStream = await getUserMedia({ video: true, audio: false })
-    setVideoStream(videoStream)
-  } catch (e) {
-    console.log(e)
-  }
-
-  if (!(audioStream || videoStream)) {
-    alert(
-      'Unable to enter the space, because there is no access to audio or video'
-    )
-  }
-
   me.device.onReady(() => {
     // initialize the display canvas once the device/browser is ready
     if (
       !me.video.init(FOV_WIDTH, FOV_HEIGHT, {
         parent: HTML_DIV_ID,
-        renderer: me.video.CANVAS,
+        renderer: me.video.WEBGL,
         scale: 'auto',
         scaleMethod: 'flex-width',
       })
@@ -183,13 +171,13 @@ const bindKeyboardListeners = () => {
     }
 
     // Initialize the audio.
-    me.audio.init('mp3,ogg')
+    // me.audio.init('mp3,ogg')
 
     // allow cross-origin for image/texture loading
     me.loader.crossOrigin = 'anonymous'
 
     // set and load all resources.
-    me.loader.preload(DataManifest, function () {
+    me.loader.preload(DataManifest, async function () {
       // set the user defined game stages
       me.state.set(me.state.PLAY, new PlayScreen())
 
@@ -203,6 +191,37 @@ const bindKeyboardListeners = () => {
       // Start the game.
       me.state.change(me.state.PLAY)
 
+      setTimeout(() => {
+        if (!IS_STUDIO) {
+          me.game.viewport.setBounds(0, 0, BUILDING_BOUND_X, BUILDING_BOUND_Y)
+        }
+        const center = new Vector2d(SPAWN_X, SPAWN_Y)
+        me.game.viewport.follow(center)
+        me.game.viewport.unfollow()
+        // do this to trigger a repaint
+        me.game.repaint()
+      }, 50)
+      window.game = me.game
+
+      let audioStream, videoStream
+      try {
+        audioStream = await getUserMedia({ video: false, audio: true })
+        setAudioStream(audioStream)
+      } catch (e) {
+        console.log(e)
+      }
+      try {
+        videoStream = await getUserMedia({ video: true, audio: false })
+        setVideoStream(videoStream)
+      } catch (e) {
+        console.log(e)
+      }
+
+      if (!(audioStream || videoStream)) {
+        alert(
+          'Unable to enter the space, because there is no access to audio or video'
+        )
+      }
       if (!IS_NEW_HERE) {
         myself.load((meData) => {
           addMyself(meData[NAME_KEY], meData[IMAGE_KEY], myselfId)

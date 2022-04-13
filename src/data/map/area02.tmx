@@ -4,7 +4,7 @@
   <properties>
    <property name="z" type="int" value="1"/>
   </properties>
-  <object id="26" name="background" x="0" y="0" width="3999" height="3763">
+  <object id="26" name="background" x="0" y="0" width="4000" height="3763">
    <properties>
     <property name="frameheight" type="int" value="3763"/>
     <property name="framewidth" type="int" value="4000"/>

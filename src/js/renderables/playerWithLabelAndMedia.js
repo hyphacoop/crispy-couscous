@@ -26,9 +26,10 @@ class PlayerWithLabelAndMediaEntity extends Entity {
 
     // label
     this.myNameText = document.createElement('div')
-    this.myNameText.innerHTML = this.artistaName
+    this.myNameTextInner = document.createElement('div')
+    this.myNameTextInner.innerHTML = this.artistaName
+    this.myNameText.appendChild(this.myNameTextInner)
     this.myNameText.classList.add('name-label')
-    this.myNameText.style.position = `absolute`
     // this.myNameText.addEventListener('click', this.onClick.bind(this))
     // x and y are 'world' coordinates
     this.updateLabelPosition(x, y)
@@ -76,8 +77,7 @@ class PlayerWithLabelAndMediaEntity extends Entity {
       worldX + SELF_REPRESENTATION_SIZE / 2,
       worldY + SELF_REPRESENTATION_SIZE + VERTICAL_PADDING
     )
-    this.myNameText.style.left = `${globalCoord.x}px`
-    this.myNameText.style.top = `${globalCoord.y}px`
+    this.myNameText.style.transform = `translate(${globalCoord.x}px, ${globalCoord.y}px)`
   }
 
   // remoteId is optional, and should be passed if this is from remote
@@ -131,8 +131,7 @@ class PlayerWithLabelAndMediaEntity extends Entity {
     this.mediaContainer.style.width = `${widthHeight}px`
     this.mediaContainer.style.height = `${widthHeight}px`
 
-    this.mediaContainer.style.left = `${globalCoordTopLeft.x}px`
-    this.mediaContainer.style.top = `${globalCoordTopLeft.y}px`
+    this.mediaContainer.style.transform = `translate(${globalCoordTopLeft.x}px, ${globalCoordTopLeft.y}px)`
   }
 
   select() {

@@ -87,16 +87,24 @@ body {
 }
 
 .name-label {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.name-label > div {
   font-family: helvetica, sans-serif;
-  transform: translate(-50%);
   background: white;
   padding: 4px 6px;
   border-radius: 3px;
   color: #333;
+  transform: translate(-50%);
 }
 
 .player-media {
   position: absolute;
+  top: 0;
+  left: 0;
   overflow: hidden;
   display: flex;
   justify-content: center;
