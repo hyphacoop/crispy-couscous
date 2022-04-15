@@ -49,7 +49,7 @@ class PlayerEntity extends PlayerWithLabelAndMediaEntity {
       host: '143.110.213.122',
       port: 9000,
       path: '/myapp',
-      // secure: true,
+      secure: false,
       debug: 3, // errors
     })
     var that = this
