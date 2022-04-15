@@ -22,7 +22,7 @@ import OtherPlayer from './renderables/otherplayer'
 const artistasPlayers = {}
 
 // forget after 1 minute about players
-const ONE_MINUTE = 1000 * 60
+const TWENTY_SECONDS = 1000 * 20
 
 // find and update or create a new OtherPlayer type...
 function createOrUpdateOtherPlayer(id, details) {
@@ -43,8 +43,8 @@ function createOrUpdateOtherPlayer(id, details) {
   } else if (
     // local player and remote player must both be either in the 'main building' or the 'studio'
     details[IN_STUDIO_KEY] === IS_STUDIO &&
-    // remote players details must be recent, seen within the last minute
-    Date.now() - details[LAST_SEEN_KEY] < ONE_MINUTE
+    // remote players details must be recent, seen within the last twenty seconds
+    Date.now() - details[LAST_SEEN_KEY] < TWENTY_SECONDS
   ) {
     // create a new player, if their data is recent enough
     artistaPlayer = new OtherPlayer(
