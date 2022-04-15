@@ -55,7 +55,7 @@ class PlayerEntity extends PlayerWithLabelAndMediaEntity {
         'iceServers': [{
           urls: 'turn:roobot.hypha.coop:8443?transport=tcp', 
           username: 'hypha', 
-          credentials:'hyphacoop'
+          credential:'hyphacoop'
         },{
           urls: 'stun:http://roobot.hypha.coop:3478',
         },{ 
