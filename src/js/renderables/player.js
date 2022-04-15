@@ -51,17 +51,6 @@ class PlayerEntity extends PlayerWithLabelAndMediaEntity {
       path: '/myapp',
       secure: true,
       debug: 3, // errors
-      config: {
-        'iceServers': [{
-          urls: 'turn:roobot.hypha.coop:8443?transport=tcp', 
-          username: 'hypha', 
-          credential:'hyphacoop'
-        },{
-          urls: 'stun:roobot.hypha.coop:3478',
-        },{ 
-          'urls': 'stun:stun.l.google.com:19302' 
-        }], 'sdpSemantics': 'unified-plan'
-      }
     })
     var that = this
 
