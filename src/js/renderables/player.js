@@ -46,7 +46,11 @@ class PlayerEntity extends PlayerWithLabelAndMediaEntity {
 
     // audio
     this.peer = new Peer(this.playerId, {
-      debug: 1, // errors
+      host: '143.110.213.122',
+      port: 9000,
+      path: '/myapp',
+      // secure: true,
+      debug: 3, // errors
     })
     var that = this
 
