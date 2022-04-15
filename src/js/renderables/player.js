@@ -46,10 +46,10 @@ class PlayerEntity extends PlayerWithLabelAndMediaEntity {
 
     // audio
     this.peer = new Peer(this.playerId, {
-      host: '143.110.213.122',
-      port: 9000,
+      host: 'peerjs.staging.hypha.coop',
+      port: 443,
       path: '/myapp',
-      secure: false,
+      secure: true,
       debug: 3, // errors
     })
     var that = this
