@@ -57,7 +57,7 @@ class PlayerEntity extends PlayerWithLabelAndMediaEntity {
           username: 'hypha', 
           credential:'hyphacoop'
         },{
-          urls: 'stun:http://roobot.hypha.coop:3478',
+          urls: 'stun:roobot.hypha.coop:3478',
         },{ 
           'urls': 'stun:stun.l.google.com:19302' 
         }], 'sdpSemantics': 'unified-plan'
