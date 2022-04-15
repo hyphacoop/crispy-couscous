@@ -53,11 +53,11 @@ class PlayerEntity extends PlayerWithLabelAndMediaEntity {
       debug: 3, // errors
       config: {
         'iceServers': [{
-          urls: 'turn:turn01.meet.coop:443?transport=tcp', 
-          username: null, 
-          credentials:'5e25dd8032a078e130071511acf35d6db107841acf086f1d48fa9ac1c7c53a6f'
+          urls: 'turn:roobot.hypha.coop:8443?transport=tcp', 
+          username: 'hypha', 
+          credentials:'hyphacoop'
         },{
-          urls: 'stun:http://turn01.meet.coop:3478',
+          urls: 'stun:http://roobot.hypha.coop:3478',
         },{ 
           'urls': 'stun:stun.l.google.com:19302' 
         }], 'sdpSemantics': 'unified-plan'
