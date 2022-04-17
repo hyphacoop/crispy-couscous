@@ -148,7 +148,7 @@ const bindKeyboardListeners = () => {
     if (
       !me.video.init(FOV_WIDTH, FOV_HEIGHT, {
         parent: HTML_DIV_ID,
-        renderer: me.video.WEBGL,
+        renderer: me.video.CANVAS,
         scale: 'auto',
         scaleMethod: 'flex-width',
       })
