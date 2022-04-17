@@ -2,6 +2,7 @@ import Gun from 'gun/gun'
 import 'gun/lib/load.js'
 import IS_STUDIO from './isStudio'
 import { removePlayer } from './js/createOrUpdateOtherPlayer'
+import 'gun/lib/yson.js'
 
 // const RELAY_ADDRESS = 'http://localhost:8080/gun'
 const RELAY_ADDRESS = 'https://hypha-gun-relay.herokuapp.com/gun'
