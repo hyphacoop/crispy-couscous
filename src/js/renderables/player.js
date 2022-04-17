@@ -52,7 +52,33 @@ class PlayerEntity extends PlayerWithLabelAndMediaEntity {
       secure: true,
       debug: 3, // errors
       config: {
-        iceServers: [{   urls: [ "stun:us-turn4.xirsys.com" ]}, {   username: "0K0RVRH0NPy3mTUeqL_vrpJKAOzD19ksNfef6dBPfU1Kv7qNhmGbrribSoo-KlKNAAAAAGJbVpR1ZGl0dmlyYQ==",   credential: "2e58e7e6-bde0-11ec-a671-0242ac140004",   urls: [       "turn:us-turn4.xirsys.com:80?transport=udp",       "turn:us-turn4.xirsys.com:3478?transport=udp",       "turn:us-turn4.xirsys.com:80?transport=tcp",       "turn:us-turn4.xirsys.com:3478?transport=tcp",       "turns:us-turn4.xirsys.com:443?transport=tcp",       "turns:us-turn4.xirsys.com:5349?transport=tcp"   ]}]
+        iceServers: [{
+          urls: ["stun:us-turn4.xirsys.com"]
+        }, {
+          url: "turn:us-turn4.xirsys.com:80?transport=udp",
+          username: "0K0RVRH0NPy3mTUeqL_vrpJKAOzD19ksNfef6dBPfU1Kv7qNhmGbrribSoo-KlKNAAAAAGJbVpR1ZGl0dmlyYQ==",
+          credential: "2e58e7e6-bde0-11ec-a671-0242ac140004",
+        }, {
+          url: "turn:us-turn4.xirsys.com:3478?transport=udp",
+          username: "0K0RVRH0NPy3mTUeqL_vrpJKAOzD19ksNfef6dBPfU1Kv7qNhmGbrribSoo-KlKNAAAAAGJbVpR1ZGl0dmlyYQ==",
+          credential: "2e58e7e6-bde0-11ec-a671-0242ac140004"
+        }, {
+          url: "turn:us-turn4.xirsys.com:80?transport=tcp",
+          username: "0K0RVRH0NPy3mTUeqL_vrpJKAOzD19ksNfef6dBPfU1Kv7qNhmGbrribSoo-KlKNAAAAAGJbVpR1ZGl0dmlyYQ==",
+          credential: "2e58e7e6-bde0-11ec-a671-0242ac140004"
+        }, {
+          url: "turn:us-turn4.xirsys.com:3478?transport=tcp",
+          username: "0K0RVRH0NPy3mTUeqL_vrpJKAOzD19ksNfef6dBPfU1Kv7qNhmGbrribSoo-KlKNAAAAAGJbVpR1ZGl0dmlyYQ==",
+          credential: "2e58e7e6-bde0-11ec-a671-0242ac140004"
+        }, {
+          url: "turns:us-turn4.xirsys.com:443?transport=tcp",
+          username: "0K0RVRH0NPy3mTUeqL_vrpJKAOzD19ksNfef6dBPfU1Kv7qNhmGbrribSoo-KlKNAAAAAGJbVpR1ZGl0dmlyYQ==",
+          credential: "2e58e7e6-bde0-11ec-a671-0242ac140004"
+        }, {
+          url: "turns:us-turn4.xirsys.com:5349?transport=tcp",
+          username: "0K0RVRH0NPy3mTUeqL_vrpJKAOzD19ksNfef6dBPfU1Kv7qNhmGbrribSoo-KlKNAAAAAGJbVpR1ZGl0dmlyYQ==",
+          credential: "2e58e7e6-bde0-11ec-a671-0242ac140004"
+        }]
       }
     })
     var that = this
