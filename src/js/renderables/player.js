@@ -50,7 +50,7 @@ class PlayerEntity extends PlayerWithLabelAndMediaEntity {
       port: 443,
       path: '/myapp',
       secure: true,
-      debug: 3, // errors
+      debug: 2, // 3 == print all logs, 2 prints errors and warnings
       config: {
         iceServers: [{
           urls: ["stun:us-turn4.xirsys.com"]
@@ -168,6 +168,9 @@ class PlayerEntity extends PlayerWithLabelAndMediaEntity {
       x: worldRelative.x - this.width / 2,
       y: worldRelative.y - this.height / 2,
     }
+
+    this.destination = destination;
+    /*
     const hasOtherPlayerSelected = game.world.getChildren().find((r) => {
       return r.isSelected
     })
@@ -182,6 +185,7 @@ class PlayerEntity extends PlayerWithLabelAndMediaEntity {
       // (and adjust by self-representation size)
       this.destination = destination
     }
+    */
   }
 
   /**
